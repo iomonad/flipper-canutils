@@ -27,7 +27,7 @@
 
 /* MAIN MENU*/
 
-static bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
+bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
   Application *app = (Application*)context;
   bool is_consumed = false;
 
@@ -70,9 +70,11 @@ void canutils_scene_on_exit_main_menu(void* context) {
   menu_reset(app->menu);
 }
 
+
 bool (*const canutils_scene_on_event_handlers[])(void*, SceneManagerEvent) = {
   canutils_scene_on_event_main_menu,
 };
+
 
 void (*const canutils_scene_on_exit_handlers[])(void*) = {
   canutils_scene_on_exit_main_menu,
