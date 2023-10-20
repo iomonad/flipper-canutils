@@ -25,8 +25,6 @@
 #include "scene.h"
 #include "canutils.h"
 
-static void
-
 /*
  * @desc TODO
  */
