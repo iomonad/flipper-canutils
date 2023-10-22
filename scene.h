@@ -91,11 +91,12 @@ typedef enum {
   Select_CanFdTest
 } ApplicationSelection;
 
-const SceneManagerHandlers ev_handler = {
+static const SceneManagerHandlers ev_handler = {
   .on_enter_handlers = canutils_scene_on_enter_handlers,
   .on_event_handlers = canutils_scene_on_event_handlers,
   .on_exit_handlers  = canutils_scene_on_exit_handlers,
-  .scene_num         = ViewScene_Total};
+  .scene_num         = ViewScene_Total
+};
 
 /* PROTO */
 

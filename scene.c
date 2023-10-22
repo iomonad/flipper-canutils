@@ -72,8 +72,6 @@ void canutils_scene_main_menu_callback_handler(void *context,
 void canutils_scene_manager_init(Application *app) {
   FURI_LOG_T(TAG, "scene setup");
   app->scene_manager = scene_manager_alloc(&ev_handler, app);
-
-  return ;
 }
 
 void canutils_view_dispatcher_init(Application *app) {
@@ -83,7 +81,4 @@ void canutils_view_dispatcher_init(Application *app) {
 
   app->menu = menu_alloc();
   app->popup = popup_alloc();
-
-  /* Handler to implement */
-  return ;
 }
