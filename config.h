@@ -22,12 +22,7 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#ifndef __CANUTILS_H__
-#define __CANUTILS_H__
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
 
-/* Load bitmaps */
-#include <canutils_icons.h>
-
-#define TAG "canutils"
-
-#endif // __CANUTILS_H__
+#endif // __CONFIG_H__

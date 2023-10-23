@@ -26,13 +26,11 @@
 #include <furi_hal_spi.h>
 #include <furi_hal_spi_config.h>
 
-#include <canutils_icons.h>
-
 #include "scene.h"
 #include "canutils.h"
 
 static Application *canutils_context_setup(void) {
-  FURI_LOG_T(TAG, "canutils_context_setup");
+  FURI_LOG_I(TAG, "canutils_context_setup");
 
   Application *app = (Application*)malloc(sizeof(Application));
   if (app == NULL) {
@@ -45,6 +43,7 @@ static Application *canutils_context_setup(void) {
 }
 
 static void canutils_context_free(Application *app) {
+  FURI_LOG_T(TAG, "freeing canutils context");
   if (app->scene_manager) {
     scene_manager_free(app->scene_manager);
   }
@@ -68,19 +67,13 @@ static void canutils_context_free(Application *app) {
 int32_t canutils_app(void* p) {
   UNUSED(p);
 
-  FURI_LOG_I(TAG, "context setup");
   Application *app = canutils_context_setup();
   Gui         *gui = furi_record_open(RECORD_GUI);
 
-  FURI_LOG_I(TAG, "dispatcher setup");
   view_dispatcher_attach_to_gui(app->view_dispatcher, gui, ViewDispatcherTypeFullscreen);
-
-  FURI_LOG_I(TAG, "scene manager next scene");
   scene_manager_next_scene(app->scene_manager, ViewScene_Menu);
-  FURI_LOG_I(TAG, "run view dispatcher");
   view_dispatcher_run(app->view_dispatcher);
 
-  FURI_LOG_I(TAG, "context cleanup");
   furi_record_close(RECORD_GUI);
   canutils_context_free(app);
   return 0;

@@ -88,12 +88,54 @@ void canutils_scene_on_exit_main_menu(void* context) {
   menu_reset(app->menu);
 }
 
+/* UNIMPLEMENTED */
+
+static bool unimplemented_on_event(void *context,
+				   SceneManagerEvent event) {
+  Application* app = (Application*)context;
+
+  UNUSED(app);
+  UNUSED(context);
+  UNUSED(event);
+
+
+  return false;
+}
+
+static void unimplemented_on_exit(void *context) {
+  Application* app = (Application*)context;
+
+  UNUSED(app);
+  popup_reset(app->popup);
+}
+
+
+/* Implementations */
+
 
 bool (*const canutils_scene_on_event_handlers[])(void*, SceneManagerEvent) = {
   canutils_scene_on_event_main_menu,
+  unimplemented_on_event, // CanDump
+  unimplemented_on_event, // CanPlayer
+  unimplemented_on_event, // CanSend
+  unimplemented_on_event, // CanGen
+  unimplemented_on_event, // CanSequence
+  unimplemented_on_event, // CanSniffer
+  unimplemented_on_event, // CanBusLoad
+  unimplemented_on_event, // CanCalcBitTiming
+  unimplemented_on_event, // CanFdTest
 };
 
 
 void (*const canutils_scene_on_exit_handlers[])(void*) = {
   canutils_scene_on_exit_main_menu,
+  unimplemented_on_exit, // CanDump
+  unimplemented_on_exit, // CanPlayer
+  unimplemented_on_exit, // CanSend
+  unimplemented_on_exit, // CanGen
+  unimplemented_on_exit, // CanSequence
+  unimplemented_on_exit, // CanSniffer
+  unimplemented_on_exit, // CanBusLoad
+  unimplemented_on_exit, // CanCalcBitTiming
+  unimplemented_on_exit, // CanFdTest
 };

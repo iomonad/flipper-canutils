@@ -69,16 +69,50 @@ void canutils_scene_main_menu_callback_handler(void *context,
   }
 }
 
+static bool canutils_scene_manager_custom_event_callback(void* context,
+							 uint32_t custom_event) {
+    furi_assert(context);
+    Application* app = (Application*)context;
+
+    FURI_LOG_T(TAG, "canutils_scene_event_callback_setup");
+    return scene_manager_handle_custom_event(app->scene_manager, custom_event);
+}
+
+static bool canutils_scene_manager_navigation_event_callback(void* context) {
+  furi_assert(context);
+  Application* app = (Application*)context;
+
+  FURI_LOG_T(TAG, "canutils_scene_manager_callback_setup");
+  return scene_manager_handle_back_event(app->scene_manager);
+}
+
+
+/* Setup */
+
 void canutils_scene_manager_init(Application *app) {
-  FURI_LOG_T(TAG, "scene setup");
+  FURI_LOG_T(TAG, "canutils_scene_manager_setup");
   app->scene_manager = scene_manager_alloc(&ev_handler, app);
 }
 
 void canutils_view_dispatcher_init(Application *app) {
 
+  FURI_LOG_T(TAG, "canutils_view_dispatcher_setup");
   app->view_dispatcher = view_dispatcher_alloc();
+
+  if (app->view_dispatcher == NULL) {
+    FURI_LOG_W(TAG, "dispatcher allocation failure");
+  }
+
   view_dispatcher_enable_queue(app->view_dispatcher);
 
   app->menu = menu_alloc();
   app->popup = popup_alloc();
+
+  view_dispatcher_set_event_callback_context(app->view_dispatcher, app);
+  view_dispatcher_set_custom_event_callback(app->view_dispatcher,
+					    canutils_scene_manager_custom_event_callback);
+  view_dispatcher_set_navigation_event_callback(app->view_dispatcher,
+						canutils_scene_manager_navigation_event_callback);
+  view_dispatcher_add_view(app->view_dispatcher, View_Menu,  menu_get_view(app->menu));
+  view_dispatcher_add_view(app->view_dispatcher, View_Popup, popup_get_view(app->popup));
 }
