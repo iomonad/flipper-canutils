@@ -32,8 +32,8 @@
 #include <gui/modules/menu.h>
 #include <gui/modules/popup.h>
 
-#include "views.h"
-#include "events.h"
+#include <views.h>
+#include <events.h>
 
 typedef enum {
   ViewScene_Menu = 0x0,

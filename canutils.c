@@ -26,8 +26,8 @@
 #include <furi_hal_spi.h>
 #include <furi_hal_spi_config.h>
 
-#include "scene.h"
-#include "canutils.h"
+#include <scene.h>
+#include <canutils.h>
 
 static Application *canutils_context_setup(void) {
   FURI_LOG_I(TAG, "canutils_context_setup");

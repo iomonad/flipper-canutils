@@ -22,8 +22,8 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#include "scene.h"
-#include "canutils.h"
+#include <scene.h>
+#include <canutils.h>
 
 /* MAIN MENU*/
 
