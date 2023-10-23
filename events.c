@@ -35,22 +35,40 @@ bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
   case SceneManagerEventTypeCustom: {
     switch (event.event) {
     case Event_CanDump:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
+      is_consumed = true;
       break;
     case Event_CanPlayer:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanPlayer);
+      is_consumed = true;
       break;
     case Event_CanSend:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanSend);
+      is_consumed = true;
       break;
     case Event_CanGen:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanGen);
+      is_consumed = true;
       break;
     case Event_CanSequence:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanSequence);
+      is_consumed = true;
       break;
     case Event_CanSniffer:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanSniffer);
+      is_consumed = true;
       break;
     case Event_CanBusLoad:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanBusLoad);
+      is_consumed = true;
       break;
     case Event_CanCalcBitTiming:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanCalcBitTiming);
+      is_consumed = true;
       break;
     case Event_CanFdTest:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
+      is_consumed = true;
       break;
     }
     break;

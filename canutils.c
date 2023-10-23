@@ -68,12 +68,16 @@ static void canutils_context_free(Application *app) {
 int32_t canutils_app(void* p) {
   UNUSED(p);
 
+  FURI_LOG_I(TAG, "context setup");
   Application *app = canutils_context_setup();
   Gui         *gui = furi_record_open(RECORD_GUI);
 
+  FURI_LOG_I(TAG, "dispatcher setup");
   view_dispatcher_attach_to_gui(app->view_dispatcher, gui, ViewDispatcherTypeFullscreen);
 
+  FURI_LOG_I(TAG, "scene manager next scene");
   scene_manager_next_scene(app->scene_manager, ViewScene_Menu);
+  FURI_LOG_I(TAG, "run view dispatcher");
   view_dispatcher_run(app->view_dispatcher);
 
   FURI_LOG_I(TAG, "context cleanup");
