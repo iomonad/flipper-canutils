@@ -1,4 +1,4 @@
-# Flipper CANutils [![FAP: Build for multiple SDK sources](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml/badge.svg)](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml) [![FAP: Build for multiple SDK sources](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml/badge.svg)](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml)
+# Flipper CANutils [![FAP: Build for multiple SDK sources](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml/badge.svg)](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml)
 Leverage Flipper Zero SPI ports to interact with MCP2515 and provide CANbus Sniss Knife inside your pocket
 
 ## Building
