@@ -1,5 +1,7 @@
 # Flipper CANutils
 
+Leverage Flipper Zero SPI ports to interact with MCP2515 and provide CANbus Sniss Knife inside your pocket
+
 ## Building
 
 ```
