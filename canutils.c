@@ -23,8 +23,6 @@
  */
 
 #include <furi.h>
-#include <furi_hal_spi.h>
-#include <furi_hal_spi_config.h>
 
 #include <scene.h>
 #include <canutils.h>
