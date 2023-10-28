@@ -242,6 +242,12 @@ typedef enum {
   ERROR_NOMSG     = 5
 } mcp_error_t;
 
+typedef struct {
+  uint8_t FIFO_BYTES_AVAILABLE : 4;
+  mcp_error_t STATE : 3;
+  bool        CHIP_RDYn : 1;
+} mcp_results_t;
+
 typedef enum {
   MASK0,
   MASK1
@@ -454,6 +460,7 @@ typedef enum {
 } mcp_register_t;
 
 #define DEFAULT_SPI_CLOCK = 10000000; // 10MHz
+#define MCP2515_TIMEOUT 500
 #define N_TXBUFFERS 3
 #define N_RXBUFFERS 2
 

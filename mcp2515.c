@@ -60,20 +60,67 @@ FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
   }
 }
 
+/** Write MCP2515 register through SPI
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      reg     - register to read
+ * @param      data    - data (one byte)
+ *
+ * @return     mcp2515 status code
+ */
+static mcp_results_t mcp2515_set_register(FuriHalSpiBusHandle *handle,
+					const mcp_register_t reg,
+					const uint8_t data) {
+}
+
+/** Mask-apply MCP2515 register through SPI
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      reg     - register to read
+ * @param      mask    - mask (one byte)
+ * @param      data    - data (one byte)
+ *
+ * @return     mcp2515 status code
+ */
+static mcp_results_t mcp2515_modify_register(FuriHalSpiBusHandle *handle,
+					   const mcp_register_t reg,
+					   const uint8_t mask,
+					   const uint8_t data) {
+  return ;
+}
+
+mcp_results_t mcp2515_set_mode(FuriHalSpiBusHandle *handle,
+			     const mcp_canctrl_reqop_mode_t mode) {
+}
+
+mcp_results_t mcp2515_set_config_mode(FuriHalSpiBusHandle *handle) {
+
+}
+
+void mcp2515_set_bitrate(FuriHalSpiBusHandle *handle, const can_speed_t speed) {
+
+}
+
 /** Read MCP2515 register through SPI
  *
  * @param      handle  - pointer to FuriHalSpiHandle
  * @param      reg     - register to read
  *
- * @return     void
+ * @return     mcp_results call
  */
-void mcp2515_reg_read(FuriHalSpiBusHandle* handle,
-		      const mcp_register_t reg) {
+mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
+			       const mcp_register_t reg,
+			       uint8_t *results) {
+  uint8_t tx[2];
+  uint8_t rx[2];
 
-  while (furi_hal_gpio_read(handle->miso)) { }
+  while (furi_hal_gpio_read(handle->miso))
+    ;
 
-  UNUSED(handle);
-  UNUSED(reg);
+  furi_hal_spi_bus_trx(handle, tx, rx, 2, MCP2515_TIMEOUT);
+
+  *results = *(uint8_t*)&rx[1];
+  return rx[0];
 }
 
 /** Write WCP2515 register through SPI
