@@ -24,7 +24,71 @@
  */
 
 #include <furi.h>
+#include <furi_hal_resources.h>
 #include <furi_hal_spi.h>
+#include <furi_hal_spi_types.h>
 #include <furi_hal_spi_config.h>
 
+#include <canutils.h>
 #include <mcp2515.h>
+
+/** Read MCP2515 register through SPI
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle | NULL for default preset
+ *
+ * @notes      https://github.com/flipperdevices/flipperzero-firmware/blob/dev/firmware/targets/f7/furi_hal/furi_hal_spi_config.c#L344C21-L344C53
+ *             A6 -> MISO
+ *             A7 -> MOSI
+ *             B3 -> SCK
+ *             A6 -> CS
+ *
+ * @return     the actual handler instance
+ */
+FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
+
+  FURI_LOG_I(TAG, "mcp2515_register_driver");
+  if (handle == NULL) {
+    FURI_LOG_I(TAG, "mcp2515_register_driver - using default external preset");
+    furi_hal_spi_bus_handle_init(&furi_hal_spi_bus_handle_external);
+    furi_hal_spi_acquire(&furi_hal_spi_bus_handle_external);
+    return (furi_hal_spi_bus_handle_external);
+  } else {
+    FURI_LOG_I(TAG, "mcp2515_register_driver - using custom handle");
+    furi_hal_spi_bus_handle_init(handle);
+    furi_hal_spi_acquire(handle);
+    return (furi_hal_spi_bus_handle_external);
+  }
+}
+
+/** Read MCP2515 register through SPI
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      reg     - register to read
+ *
+ * @return     void
+ */
+void mcp2515_reg_read(FuriHalSpiBusHandle* handle,
+		      const mcp_register_t reg) {
+
+  while (furi_hal_gpio_read(handle->miso)) { }
+
+  UNUSED(handle);
+  UNUSED(reg);
+}
+
+/** Write WCP2515 register through SPI
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      reg     - register
+ * @param      data    - data to write
+ *
+ * @return     void
+ */
+void mcp2515_reg_write(FuriHalSpiBusHandle* handle,
+		       const mcp_register_t reg,
+		       uint8_t *values) {
+  while (furi_hal_gpio_read(handle->miso)) { }
+
+  UNUSED(reg);
+  UNUSED(values);
+}

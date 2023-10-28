@@ -200,13 +200,13 @@
 #define MCP_20MHz_33k3BPS_CFG2 (0xFF)
 #define MCP_20MHz_33k3BPS_CFG3 (0x87)
 
-enum CAN_CLOCK {
+typedef enum {
   MCP_20MHZ,
   MCP_16MHZ,
   MCP_8MHZ
-};
+} can_clock_t;
 
-enum CAN_SPEED {
+typedef enum {
   CAN_5KBPS,
   CAN_10KBPS,
   CAN_20KBPS,
@@ -223,62 +223,62 @@ enum CAN_SPEED {
   CAN_250KBPS,
   CAN_500KBPS,
   CAN_1000KBPS
-};
+} mcp_can_speed_t;
 
-enum CAN_CLKOUT {
+typedef enum {
   CLKOUT_DISABLE = -1,
   CLKOUT_DIV1 = 0x0,
   CLKOUT_DIV2 = 0x1,
   CLKOUT_DIV4 = 0x2,
   CLKOUT_DIV8 = 0x3,
-};
+} can_clkout_t;
 
-enum ERROR {
+typedef enum {
   ERROR_OK        = 0,
   ERROR_FAIL      = 1,
   ERROR_ALLTXBUSY = 2,
   ERROR_FAILINIT  = 3,
   ERROR_FAILTX    = 4,
   ERROR_NOMSG     = 5
-};
+} mcp_error_t;
 
-enum MASK {
+typedef enum {
   MASK0,
   MASK1
-};
+} mcp_mask_t;
 
-typedef enum RXF {
+typedef enum {
   RXF0 = 0,
   RXF1 = 1,
   RXF2 = 2,
   RXF3 = 3,
   RXF4 = 4,
   RXF5 = 5
-} RXF;
+} mcp_rxf_t;
 
-enum RXBn {
+typedef enum {
   RXB0 = 0,
   RXB1 = 1
-};
+} mcp_rxbn_t;
 
-enum TXBn {
+typedef enum {
   TXB0 = 0,
   TXB1 = 1,
   TXB2 = 2
-};
+} mcp_txbn_t;
 
-typedef enum CANINTF {
-  CANINTF_RX0IF = 0x01,
-  CANINTF_RX1IF = 0x02,
-  CANINTF_TX0IF = 0x04,
-  CANINTF_TX1IF = 0x08,
-  CANINTF_TX2IF = 0x10,
-  CANINTF_ERRIF = 0x20,
-  CANINTF_WAKIF = 0x40,
-  CANINTF_MERRF = 0x80
-} CANINTF;
+typedef enum canintf_t {
+  canintf_t_RX0IF = 0x01,
+  canintf_t_RX1IF = 0x02,
+  canintf_t_TX0IF = 0x04,
+  canintf_t_TX1IF = 0x08,
+  canintf_t_TX2IF = 0x10,
+  canintf_t_ERRIF = 0x20,
+  canintf_t_WAKIF = 0x40,
+  canintf_t_MERRF = 0x80
+} canintf_t;
 
-enum EFLG  {
+typedef enum {
   EFLG_RX1OVR = (1<<7),
   EFLG_RX0OVR = (1<<6),
   EFLG_TXBO   = (1<<5),
@@ -287,7 +287,7 @@ enum EFLG  {
   EFLG_TXWAR  = (1<<2),
   EFLG_RXWAR  = (1<<1),
   EFLG_EWARN  = (1<<0)
-};
+} mcp_eflg_t;
 
 static const uint8_t CANCTRL_REQOP = 0xE0;
 static const uint8_t CANCTRL_ABAT = 0x10;
@@ -295,14 +295,14 @@ static const uint8_t CANCTRL_OSM = 0x08;
 static const uint8_t CANCTRL_CLKEN = 0x04;
 static const uint8_t CANCTRL_CLKPRE = 0x03;
 
-enum CANCTRL_REQOP_MODE  {
+typedef enum {
   CANCTRL_REQOP_NORMAL     = 0x00,
   CANCTRL_REQOP_SLEEP      = 0x20,
   CANCTRL_REQOP_LOOPBACK   = 0x40,
   CANCTRL_REQOP_LISTENONLY = 0x60,
   CANCTRL_REQOP_CONFIG     = 0x80,
   CANCTRL_REQOP_POWERUP    = 0xE0
-};
+} mcp_canctrl_reqop_mode_t;
 
 static const uint8_t CANSTAT_OPMOD = 0xE0;
 static const uint8_t CANSTAT_ICOD = 0x0E;
@@ -331,12 +331,13 @@ static const uint8_t MCP_EID0 = 3;
 static const uint8_t MCP_DLC  = 4;
 static const uint8_t MCP_DATA = 5;
 
-enum STAT {
+typedef enum {
   STAT_RX0IF = (1<<0),
   STAT_RX1IF = (1<<1)
-};
+} mcp_stat_t;
 
-static const uint8_t STAT_RXIF_MASK = STAT_RX0IF | STAT_RX1IF;
+static const uint8_t mcp_stat_rxif_mask
+= STAT_RX0IF | STAT_RX1IF;
 
 enum TXBnCTRL {
   TXB_ABTF   = 0x40,
@@ -347,14 +348,14 @@ enum TXBnCTRL {
   TXB_TXP    = 0x03
 };
 
-static const uint8_t EFLG_ERRORMASK =
+static const uint8_t mcp_eflg_errormask_t =
   EFLG_RX1OVR
   | EFLG_RX0OVR
   | EFLG_TXBO
   | EFLG_TXEP
   | EFLG_RXEP;
 
-typedef enum INSTRUCTION {
+typedef enum {
   INSTRUCTION_WRITE       = 0x02,
   INSTRUCTION_READ        = 0x03,
   INSTRUCTION_BITMOD      = 0x05,
@@ -370,9 +371,9 @@ typedef enum INSTRUCTION {
   INSTRUCTION_READ_STATUS = 0xA0,
   INSTRUCTION_RX_STATUS   = 0xB0,
   INSTRUCTION_RESET       = 0xC0
-} INSTRUCTION;
+} mcp_instruction_t;
 
-typedef enum REGISTER {
+typedef enum {
   MCP_RXF0SIDH = 0x00,
   MCP_RXF0SIDL = 0x01,
   MCP_RXF0EID8 = 0x02,
@@ -413,7 +414,7 @@ typedef enum REGISTER {
   MCP_CNF2     = 0x29,
   MCP_CNF1     = 0x2A,
   MCP_CANINTE  = 0x2B,
-  MCP_CANINTF  = 0x2C,
+  MCP_canintf_t  = 0x2C,
   MCP_EFLG     = 0x2D,
   MCP_TXB0CTRL = 0x30,
   MCP_TXB0SIDH = 0x31,
@@ -450,31 +451,27 @@ typedef enum REGISTER {
   MCP_RXB1EID0 = 0x74,
   MCP_RXB1DLC  = 0x75,
   MCP_RXB1DATA = 0x76
-} REGISTER;
+} mcp_register_t;
 
 #define DEFAULT_SPI_CLOCK = 10000000; // 10MHz
 #define N_TXBUFFERS 3
 #define N_RXBUFFERS 2
 
-typedef struct TXBn_REGS {
-  REGISTER CTRL;
-  REGISTER SIDH;
-  REGISTER DATA;
-} TXBn_REGS;
+typedef struct {
+  mcp_register_t CTRL;
+  mcp_register_t SIDH;
+  mcp_register_t DATA;
+} mcp_txbn_regs_t;
 
 
-typedef struct RXBn_REGS {
-  REGISTER CTRL;
-  REGISTER SIDH;
-  REGISTER DATA;
-  CANINTF  CANINTF_RXnIF;
-} RXBn_REGS;
+typedef struct {
+  mcp_register_t CTRL;
+  mcp_register_t SIDH;
+  mcp_register_t DATA;
+  canintf_t      RXnIF;
+} mcp_rxbn_regs_t;
 
-static const TXBn_REGS TXB[N_TXBUFFERS];
-static const RXBn_REGS RXB[N_RXBUFFERS];
-
-
-/* PROTOS */
-
+static const mcp_txbn_regs_t TXB[N_TXBUFFERS];
+static const mcp_rxbn_regs_t RXB[N_RXBUFFERS];
 
 #endif // __MCP2515_H__
