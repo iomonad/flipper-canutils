@@ -243,7 +243,7 @@ typedef enum {
 } mcp_error_t;
 
 typedef struct {
-  uint8_t FIFO_BYTES_AVAILABLE : 4;
+  uint8_t     FIFO_BYTES_AVAILABLE : 4;
   mcp_error_t STATE : 3;
   bool        CHIP_RDYn : 1;
 } mcp_results_t;
@@ -342,7 +342,7 @@ typedef enum {
   STAT_RX1IF = (1<<1)
 } mcp_stat_t;
 
-static const uint8_t mcp_stat_rxif_mask
+static const uint8_t MCP_STAT_RXIF_MASK
 = STAT_RX0IF | STAT_RX1IF;
 
 enum TXBnCTRL {
@@ -354,7 +354,7 @@ enum TXBnCTRL {
   TXB_TXP    = 0x03
 };
 
-static const uint8_t mcp_eflg_errormask_t =
+static const uint8_t MCP_EFLG_ERRORMASK =
   EFLG_RX1OVR
   | EFLG_RX0OVR
   | EFLG_TXBO

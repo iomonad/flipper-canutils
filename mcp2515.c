@@ -67,18 +67,19 @@ FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
  * @param      reg     - register to read
  * @param      results - point to write data from
  *
- * @return     mcp_results call
+ * @return     mcp2515 results call
  */
-static mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
-				      const mcp_register_t reg,
-				      uint8_t *results) {
-  uint8_t tx[2] = { reg, 0};
+mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
+			       const mcp_register_t reg,
+			       uint8_t *results) {
+  uint8_t tx[3] = { INSTRUCTION_READ , reg, 0 };
   mcp_results_t rx[2] = {0};
 
+  FURI_LOG_T(TAG, "mcp2515 - register read");
   while (furi_hal_gpio_read(handle->miso))
     ;
 
-  furi_hal_spi_bus_trx(handle, tx, (uint8_t*)rx, 2, MCP2515_TIMEOUT);
+  furi_hal_spi_bus_trx(handle, tx, (uint8_t*)rx, 3, MCP2515_TIMEOUT);
 
   assert((rx[0].CHIP_RDYn) == 0x0);
   *results = *(uint8_t*)&rx[1];
@@ -86,21 +87,50 @@ static mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
 }
 
 
-/** Write WCP2515 register through SPI
+/** Write MCP2515 register through SPI
  *
  * @param      handle  - pointer to FuriHalSpiHandle
  * @param      reg     - register
  * @param      data    - data to write
  *
- * @return     void
+ * @return     mcp2515 results call
  */
-static mcp_results_t mcp2515_reg_write(FuriHalSpiBusHandle* handle,
-				       const mcp_register_t reg,
-				       uint8_t data) {
+mcp_results_t mcp2515_reg_write(FuriHalSpiBusHandle* handle,
+				const mcp_register_t reg,
+				const uint8_t data) {
 
-  uint8_t tx[2] = { reg, data};
+  uint8_t tx[3] = { INSTRUCTION_WRITE, reg, data};
   mcp_results_t rx[2] = {0};
 
+  FURI_LOG_T(TAG, "mcp2515 - register write");
+  while (furi_hal_gpio_read(handle->miso))
+    ;
+
+  furi_hal_spi_bus_trx(handle, tx, (uint8_t*)rx, 3, MCP2515_TIMEOUT);
+  assert((rx[0].CHIP_RDYn | rx[1].CHIP_RDYn) == 0x0);
+
+  return rx[1];
+}
+
+
+/** Modify MCP2515 register through SPI
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      reg     - register
+ * @param      mask    - mask to apply
+ * @param      data    - data to write
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2515_reg_modify(FuriHalSpiBusHandle* handle,
+				 const mcp_register_t reg,
+				 const uint8_t mask,
+				 const uint8_t data) {
+
+  uint8_t tx[4] = { INSTRUCTION_BITMOD, reg, mask, data };
+  mcp_results_t rx[2] = {0};
+
+  FURI_LOG_T(TAG, "mcp2515 - register modify");
   while (furi_hal_gpio_read(handle->miso))
     ;
 
@@ -108,4 +138,398 @@ static mcp_results_t mcp2515_reg_write(FuriHalSpiBusHandle* handle,
   assert((rx[0].CHIP_RDYn | rx[1].CHIP_RDYn) == 0x0);
 
   return rx[1];
+}
+
+
+/** Modify MCP2515 mode
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      mode    - mode to switch to (see `mcp_canctrl_reqop_mode_t`)
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2515_set_mode(FuriHalSpiBusHandle* handle,
+			       const mcp_canctrl_reqop_mode_t mode) {
+  return mcp2515_reg_modify(handle, MCP_CANCTRL, CANCTRL_REQOP, mode);
+}
+
+
+/** Enter MCP2515 in CONFIG mode
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2525_set_config_mode(FuriHalSpiBusHandle* handle) {
+  return mcp2515_set_mode(handle, CANCTRL_REQOP_CONFIG);
+}
+
+
+/** Enter MCP2515 in LISTEN_ONLY mode
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2515_set_listen_only_mode(FuriHalSpiBusHandle* handle) {
+  return mcp2515_set_mode(handle, CANCTRL_REQOP_LISTENONLY);
+}
+
+
+/** Enter MCP2515 in SLEEP mode
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2515_set_sleep_mode(FuriHalSpiBusHandle* handle) {
+  return mcp2515_set_mode(handle, CANCTRL_REQOP_SLEEP);
+}
+
+
+/** Enter MCP2515 in LOOPBACK mode
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2515_set_loopback_mode(FuriHalSpiBusHandle* handle) {
+  return mcp2515_set_mode(handle, CANCTRL_REQOP_LOOPBACK);
+}
+
+
+/** Enter MCP2515 in NORMAL mode
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2515_set_normal_mode(FuriHalSpiBusHandle* handle) {
+  return mcp2515_set_mode(handle, CANCTRL_REQOP_NORMAL);
+}
+
+
+/** Modify MCP2515 bitrate
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      bitrate - bitrate to setup
+ * @param      clock - bitrate clock (use NULL for default)
+ *
+ * @return     mcp2515 results call
+ */
+mcp_results_t mcp2515_set_bitrate(FuriHalSpiBusHandle* handle,
+				  const mcp_can_speed_t bitrate,
+				  const can_clock_t *clock) {
+
+  mcp_results_t results = mcp2515_set_normal_mode(handle);
+
+  if (clock == NULL) {
+
+    can_clock_t default_clock = MCP_16MHZ;
+
+    return mcp2515_set_bitrate(handle, bitrate, &default_clock);
+  }
+
+  uint8_t set = 1, cfg1, cfg2, cfg3;
+
+  switch (*clock) {
+    case (MCP_8MHZ):
+      switch (bitrate) {
+	case (CAN_5KBPS):                                               //   5KBPS
+	  cfg1 = MCP_8MHz_5kBPS_CFG1;
+	  cfg2 = MCP_8MHz_5kBPS_CFG2;
+	  cfg3 = MCP_8MHz_5kBPS_CFG3;
+	  break;
+
+	case (CAN_10KBPS):                                              //  10KBPS
+	  cfg1 = MCP_8MHz_10kBPS_CFG1;
+	  cfg2 = MCP_8MHz_10kBPS_CFG2;
+	  cfg3 = MCP_8MHz_10kBPS_CFG3;
+	  break;
+
+	case (CAN_20KBPS):                                              //  20KBPS
+	  cfg1 = MCP_8MHz_20kBPS_CFG1;
+	  cfg2 = MCP_8MHz_20kBPS_CFG2;
+	  cfg3 = MCP_8MHz_20kBPS_CFG3;
+	  break;
+
+	case (CAN_31K25BPS):                                            //  31.25KBPS
+	  cfg1 = MCP_8MHz_31k25BPS_CFG1;
+	  cfg2 = MCP_8MHz_31k25BPS_CFG2;
+	  cfg3 = MCP_8MHz_31k25BPS_CFG3;
+	  break;
+
+	case (CAN_33KBPS):                                              //  33.333KBPS
+	  cfg1 = MCP_8MHz_33k3BPS_CFG1;
+	  cfg2 = MCP_8MHz_33k3BPS_CFG2;
+	  cfg3 = MCP_8MHz_33k3BPS_CFG3;
+	  break;
+
+	case (CAN_40KBPS):                                              //  40Kbps
+	  cfg1 = MCP_8MHz_40kBPS_CFG1;
+	  cfg2 = MCP_8MHz_40kBPS_CFG2;
+	  cfg3 = MCP_8MHz_40kBPS_CFG3;
+	  break;
+
+	case (CAN_50KBPS):                                              //  50Kbps
+	  cfg1 = MCP_8MHz_50kBPS_CFG1;
+	  cfg2 = MCP_8MHz_50kBPS_CFG2;
+	  cfg3 = MCP_8MHz_50kBPS_CFG3;
+	  break;
+
+	case (CAN_80KBPS):                                              //  80Kbps
+	  cfg1 = MCP_8MHz_80kBPS_CFG1;
+	  cfg2 = MCP_8MHz_80kBPS_CFG2;
+	  cfg3 = MCP_8MHz_80kBPS_CFG3;
+	  break;
+
+	case (CAN_100KBPS):                                             // 100Kbps
+	  cfg1 = MCP_8MHz_100kBPS_CFG1;
+	  cfg2 = MCP_8MHz_100kBPS_CFG2;
+	  cfg3 = MCP_8MHz_100kBPS_CFG3;
+	  break;
+
+	case (CAN_125KBPS):                                             // 125Kbps
+	  cfg1 = MCP_8MHz_125kBPS_CFG1;
+	  cfg2 = MCP_8MHz_125kBPS_CFG2;
+	  cfg3 = MCP_8MHz_125kBPS_CFG3;
+	  break;
+
+	case (CAN_200KBPS):                                             // 200Kbps
+	  cfg1 = MCP_8MHz_200kBPS_CFG1;
+	  cfg2 = MCP_8MHz_200kBPS_CFG2;
+	  cfg3 = MCP_8MHz_200kBPS_CFG3;
+	  break;
+
+	case (CAN_250KBPS):                                             // 250Kbps
+	  cfg1 = MCP_8MHz_250kBPS_CFG1;
+	  cfg2 = MCP_8MHz_250kBPS_CFG2;
+	  cfg3 = MCP_8MHz_250kBPS_CFG3;
+	  break;
+
+	case (CAN_500KBPS):                                             // 500Kbps
+	  cfg1 = MCP_8MHz_500kBPS_CFG1;
+	  cfg2 = MCP_8MHz_500kBPS_CFG2;
+	  cfg3 = MCP_8MHz_500kBPS_CFG3;
+	  break;
+
+	case (CAN_1000KBPS):                                            //   1Mbps
+	  cfg1 = MCP_8MHz_1000kBPS_CFG1;
+	  cfg2 = MCP_8MHz_1000kBPS_CFG2;
+	  cfg3 = MCP_8MHz_1000kBPS_CFG3;
+	  break;
+
+	default:
+	  set = 0;
+	  break;
+        }
+      break;
+
+    case (MCP_16MHZ):
+      switch (bitrate) {
+	case (CAN_5KBPS):                                               //   5Kbps
+	  cfg1 = MCP_16MHz_5kBPS_CFG1;
+	  cfg2 = MCP_16MHz_5kBPS_CFG2;
+	  cfg3 = MCP_16MHz_5kBPS_CFG3;
+	  break;
+
+	case (CAN_10KBPS):                                              //  10Kbps
+	  cfg1 = MCP_16MHz_10kBPS_CFG1;
+	  cfg2 = MCP_16MHz_10kBPS_CFG2;
+	  cfg3 = MCP_16MHz_10kBPS_CFG3;
+	  break;
+
+	case (CAN_20KBPS):                                              //  20Kbps
+	  cfg1 = MCP_16MHz_20kBPS_CFG1;
+	  cfg2 = MCP_16MHz_20kBPS_CFG2;
+	  cfg3 = MCP_16MHz_20kBPS_CFG3;
+	  break;
+
+	case (CAN_33KBPS):                                              //  33.333Kbps
+	  cfg1 = MCP_16MHz_33k3BPS_CFG1;
+	  cfg2 = MCP_16MHz_33k3BPS_CFG2;
+	  cfg3 = MCP_16MHz_33k3BPS_CFG3;
+	  break;
+
+	case (CAN_40KBPS):                                              //  40Kbps
+	  cfg1 = MCP_16MHz_40kBPS_CFG1;
+	  cfg2 = MCP_16MHz_40kBPS_CFG2;
+	  cfg3 = MCP_16MHz_40kBPS_CFG3;
+	  break;
+
+	case (CAN_50KBPS):                                              //  50Kbps
+	  cfg1 = MCP_16MHz_50kBPS_CFG1;
+	  cfg2 = MCP_16MHz_50kBPS_CFG2;
+	  cfg3 = MCP_16MHz_50kBPS_CFG3;
+	  break;
+
+	case (CAN_80KBPS):                                              //  80Kbps
+	  cfg1 = MCP_16MHz_80kBPS_CFG1;
+	  cfg2 = MCP_16MHz_80kBPS_CFG2;
+	  cfg3 = MCP_16MHz_80kBPS_CFG3;
+	  break;
+
+	case (CAN_83K3BPS):                                             //  83.333Kbps
+	  cfg1 = MCP_16MHz_83k3BPS_CFG1;
+	  cfg2 = MCP_16MHz_83k3BPS_CFG2;
+	  cfg3 = MCP_16MHz_83k3BPS_CFG3;
+	  break;
+
+	case (CAN_95KBPS):                                              //  95Kbps
+	  cfg1 = MCP_16MHz_95kBPS_CFG1;
+	  cfg2 = MCP_16MHz_95kBPS_CFG2;
+	  cfg3 = MCP_16MHz_95kBPS_CFG3;
+	  break;
+
+	case (CAN_100KBPS):                                             // 100Kbps
+	  cfg1 = MCP_16MHz_100kBPS_CFG1;
+	  cfg2 = MCP_16MHz_100kBPS_CFG2;
+	  cfg3 = MCP_16MHz_100kBPS_CFG3;
+	  break;
+
+	case (CAN_125KBPS):                                             // 125Kbps
+	  cfg1 = MCP_16MHz_125kBPS_CFG1;
+	  cfg2 = MCP_16MHz_125kBPS_CFG2;
+	  cfg3 = MCP_16MHz_125kBPS_CFG3;
+	  break;
+
+	case (CAN_200KBPS):                                             // 200Kbps
+	  cfg1 = MCP_16MHz_200kBPS_CFG1;
+	  cfg2 = MCP_16MHz_200kBPS_CFG2;
+	  cfg3 = MCP_16MHz_200kBPS_CFG3;
+	  break;
+
+	case (CAN_250KBPS):                                             // 250Kbps
+	  cfg1 = MCP_16MHz_250kBPS_CFG1;
+	  cfg2 = MCP_16MHz_250kBPS_CFG2;
+	  cfg3 = MCP_16MHz_250kBPS_CFG3;
+	  break;
+
+	case (CAN_500KBPS):                                             // 500Kbps
+	  cfg1 = MCP_16MHz_500kBPS_CFG1;
+	  cfg2 = MCP_16MHz_500kBPS_CFG2;
+	  cfg3 = MCP_16MHz_500kBPS_CFG3;
+	  break;
+
+	case (CAN_1000KBPS):                                            //   1Mbps
+	  cfg1 = MCP_16MHz_1000kBPS_CFG1;
+	  cfg2 = MCP_16MHz_1000kBPS_CFG2;
+	  cfg3 = MCP_16MHz_1000kBPS_CFG3;
+	  break;
+
+	default:
+	  set = 0;
+	  break;
+        }
+      break;
+
+    case (MCP_20MHZ):
+      switch (bitrate) {
+	case (CAN_33KBPS):                                              //  33.333Kbps
+	  cfg1 = MCP_20MHz_33k3BPS_CFG1;
+	  cfg2 = MCP_20MHz_33k3BPS_CFG2;
+	  cfg3 = MCP_20MHz_33k3BPS_CFG3;
+	  break;
+
+	case (CAN_40KBPS):                                              //  40Kbps
+	  cfg1 = MCP_20MHz_40kBPS_CFG1;
+	  cfg2 = MCP_20MHz_40kBPS_CFG2;
+	  cfg3 = MCP_20MHz_40kBPS_CFG3;
+	  break;
+
+	case (CAN_50KBPS):                                              //  50Kbps
+	  cfg1 = MCP_20MHz_50kBPS_CFG1;
+	  cfg2 = MCP_20MHz_50kBPS_CFG2;
+	  cfg3 = MCP_20MHz_50kBPS_CFG3;
+	  break;
+
+	case (CAN_80KBPS):                                              //  80Kbps
+	  cfg1 = MCP_20MHz_80kBPS_CFG1;
+	  cfg2 = MCP_20MHz_80kBPS_CFG2;
+	  cfg3 = MCP_20MHz_80kBPS_CFG3;
+	  break;
+
+	case (CAN_83K3BPS):                                             //  83.333Kbps
+	  cfg1 = MCP_20MHz_83k3BPS_CFG1;
+	  cfg2 = MCP_20MHz_83k3BPS_CFG2;
+	  cfg3 = MCP_20MHz_83k3BPS_CFG3;
+	  break;
+
+	case (CAN_100KBPS):                                             // 100Kbps
+	  cfg1 = MCP_20MHz_100kBPS_CFG1;
+	  cfg2 = MCP_20MHz_100kBPS_CFG2;
+	  cfg3 = MCP_20MHz_100kBPS_CFG3;
+	  break;
+
+	case (CAN_125KBPS):                                             // 125Kbps
+	  cfg1 = MCP_20MHz_125kBPS_CFG1;
+	  cfg2 = MCP_20MHz_125kBPS_CFG2;
+	  cfg3 = MCP_20MHz_125kBPS_CFG3;
+	  break;
+
+	case (CAN_200KBPS):                                             // 200Kbps
+	  cfg1 = MCP_20MHz_200kBPS_CFG1;
+	  cfg2 = MCP_20MHz_200kBPS_CFG2;
+	  cfg3 = MCP_20MHz_200kBPS_CFG3;
+	  break;
+
+	case (CAN_250KBPS):                                             // 250Kbps
+	  cfg1 = MCP_20MHz_250kBPS_CFG1;
+	  cfg2 = MCP_20MHz_250kBPS_CFG2;
+	  cfg3 = MCP_20MHz_250kBPS_CFG3;
+	  break;
+
+	case (CAN_500KBPS):                                             // 500Kbps
+	  cfg1 = MCP_20MHz_500kBPS_CFG1;
+	  cfg2 = MCP_20MHz_500kBPS_CFG2;
+	  cfg3 = MCP_20MHz_500kBPS_CFG3;
+	  break;
+
+	case (CAN_1000KBPS):                                            //   1Mbps
+	  cfg1 = MCP_20MHz_1000kBPS_CFG1;
+	  cfg2 = MCP_20MHz_1000kBPS_CFG2;
+	  cfg3 = MCP_20MHz_1000kBPS_CFG3;
+	  break;
+
+	default:
+	  set = 0;
+	  break;
+        }
+      break;
+
+    default:
+      set = 0;
+      break;
+    }
+
+  if (set) {
+    mcp2515_reg_write(handle, MCP_CNF1, cfg1);
+    mcp2515_reg_write(handle, MCP_CNF2, cfg2);
+    mcp2515_reg_write(handle, MCP_CNF3, cfg3);
+
+    results.STATE = ERROR_OK;
+  } else {
+    results.STATE = ERROR_FAIL;
+  }
+  return results;
+}
+
+
+/** Check BUS errors
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     boolean
+ */
+bool mcp2515_have_errors(FuriHalSpiBusHandle* handle) {
+
+  uint8_t result = 0x0;
+
+  mcp2515_reg_read(handle, MCP_EFLG, &result);
+
+  if (result & MCP_EFLG_ERRORMASK) {
+    return true;
+  } else {
+    return false;
+  }
 }
