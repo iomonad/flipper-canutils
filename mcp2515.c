@@ -28,6 +28,7 @@
 #include <furi_hal_spi.h>
 #include <furi_hal_spi_types.h>
 #include <furi_hal_spi_config.h>
+#include <assert.h>
 
 #include <canutils.h>
 #include <mcp2515.h>
@@ -60,68 +61,30 @@ FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
   }
 }
 
-/** Write MCP2515 register through SPI
- *
- * @param      handle  - pointer to FuriHalSpiHandle
- * @param      reg     - register to read
- * @param      data    - data (one byte)
- *
- * @return     mcp2515 status code
- */
-static mcp_results_t mcp2515_set_register(FuriHalSpiBusHandle *handle,
-					const mcp_register_t reg,
-					const uint8_t data) {
-}
-
-/** Mask-apply MCP2515 register through SPI
- *
- * @param      handle  - pointer to FuriHalSpiHandle
- * @param      reg     - register to read
- * @param      mask    - mask (one byte)
- * @param      data    - data (one byte)
- *
- * @return     mcp2515 status code
- */
-static mcp_results_t mcp2515_modify_register(FuriHalSpiBusHandle *handle,
-					   const mcp_register_t reg,
-					   const uint8_t mask,
-					   const uint8_t data) {
-  return ;
-}
-
-mcp_results_t mcp2515_set_mode(FuriHalSpiBusHandle *handle,
-			     const mcp_canctrl_reqop_mode_t mode) {
-}
-
-mcp_results_t mcp2515_set_config_mode(FuriHalSpiBusHandle *handle) {
-
-}
-
-void mcp2515_set_bitrate(FuriHalSpiBusHandle *handle, const can_speed_t speed) {
-
-}
-
 /** Read MCP2515 register through SPI
  *
  * @param      handle  - pointer to FuriHalSpiHandle
  * @param      reg     - register to read
+ * @param      results - point to write data from
  *
  * @return     mcp_results call
  */
-mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
-			       const mcp_register_t reg,
-			       uint8_t *results) {
-  uint8_t tx[2];
-  uint8_t rx[2];
+static mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
+				      const mcp_register_t reg,
+				      uint8_t *results) {
+  uint8_t tx[2] = { reg, 0};
+  mcp_results_t rx[2] = {0};
 
   while (furi_hal_gpio_read(handle->miso))
     ;
 
-  furi_hal_spi_bus_trx(handle, tx, rx, 2, MCP2515_TIMEOUT);
+  furi_hal_spi_bus_trx(handle, tx, (uint8_t*)rx, 2, MCP2515_TIMEOUT);
 
+  assert((rx[0].CHIP_RDYn) == 0x0);
   *results = *(uint8_t*)&rx[1];
   return rx[0];
 }
+
 
 /** Write WCP2515 register through SPI
  *
@@ -131,11 +94,18 @@ mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
  *
  * @return     void
  */
-void mcp2515_reg_write(FuriHalSpiBusHandle* handle,
-		       const mcp_register_t reg,
-		       uint8_t *values) {
-  while (furi_hal_gpio_read(handle->miso)) { }
+static mcp_results_t mcp2515_reg_write(FuriHalSpiBusHandle* handle,
+				       const mcp_register_t reg,
+				       uint8_t data) {
 
-  UNUSED(reg);
-  UNUSED(values);
+  uint8_t tx[2] = { reg, data};
+  mcp_results_t rx[2] = {0};
+
+  while (furi_hal_gpio_read(handle->miso))
+    ;
+
+  furi_hal_spi_bus_trx(handle, tx, (uint8_t*)rx, 2, MCP2515_TIMEOUT);
+  assert((rx[0].CHIP_RDYn | rx[1].CHIP_RDYn) == 0x0);
+
+  return rx[1];
 }
