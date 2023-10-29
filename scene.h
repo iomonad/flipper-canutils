@@ -41,7 +41,6 @@ typedef enum {
   ViewScene_Menu = 0x0,
 
   ViewScene_Configuration,
-
   ViewScene_CanDump,
   ViewScene_CanPlayer,
   ViewScene_CanSend,
@@ -69,6 +68,7 @@ typedef struct {
 } Application;
 
 typedef enum {
+  Event_Config,
   Event_CanDump,
   Event_CanPlayer,
   Event_CanSend,
@@ -83,7 +83,6 @@ typedef enum {
 
 typedef enum {
   Select_Config,
-
   Select_CanDump,
   Select_CanPlayer,
   Select_CanSend,

@@ -86,7 +86,6 @@ int32_t canutils_app(void* p) {
   scene_manager_next_scene(app->scene_manager, ViewScene_Menu);
   view_dispatcher_run(app->view_dispatcher);
 
-
   furi_record_close(RECORD_GUI);
   canutils_context_free(app);
   return 0;

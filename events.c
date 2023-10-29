@@ -34,6 +34,10 @@ bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
   switch (event.type) {
   case SceneManagerEventTypeCustom: {
     switch (event.event) {
+    case Event_Config:
+      scene_manager_next_scene(app->scene_manager, ViewScene_Configuration);
+      is_consumed = true;
+      break;
     case Event_CanDump:
       scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
       is_consumed = true;
@@ -84,7 +88,7 @@ bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
 void canutils_scene_on_exit_main_menu(void* context) {
   FURI_LOG_T(TAG, "canutils_scene_on_exit_main_menu");
 
-  Application* app = context;
+  Application* app = (Application*)context;
   menu_reset(app->menu);
 }
 
@@ -115,6 +119,7 @@ static void unimplemented_on_exit(void *context) {
 
 bool (*const canutils_scene_on_event_handlers[])(void*, SceneManagerEvent) = {
   canutils_scene_on_event_main_menu,
+  unimplemented_on_event, // Configuration
   unimplemented_on_event, // CanDump
   unimplemented_on_event, // CanPlayer
   unimplemented_on_event, // CanSend
@@ -129,6 +134,7 @@ bool (*const canutils_scene_on_event_handlers[])(void*, SceneManagerEvent) = {
 
 void (*const canutils_scene_on_exit_handlers[])(void*) = {
   canutils_scene_on_exit_main_menu,
+  unimplemented_on_exit, // Configuration
   unimplemented_on_exit, // CanDump
   unimplemented_on_exit, // CanPlayer
   unimplemented_on_exit, // CanSend

@@ -33,6 +33,7 @@ static void canutils_scene_on_enter_main_menu(void *context) {
   Application *app = (Application*)context;
 
   menu_reset(app->menu);
+
   menu_add_item(app->menu, "Configuration", NULL, Select_Config, canutils_scene_main_menu_callback_handler, app);
   menu_add_item(app->menu, "CAN Dump", NULL, Select_CanDump, canutils_scene_main_menu_callback_handler, app);
   menu_add_item(app->menu, "CAN Player", NULL, Select_CanPlayer, canutils_scene_main_menu_callback_handler, app);
@@ -55,7 +56,7 @@ void unimplemented_view(void* context) {
   popup_set_context(app->popup, app);
 
   popup_set_header(app->popup, "Unimplemented", 64, 10, AlignCenter, AlignTop);
-  popup_set_icon(app->popup, 10, 10, &I_cvc_36x36);
+  popup_set_icon(app->popup, 5, 10, &I_cvc_36x36);
   popup_set_text(app->popup, "Unimplemented", 64, 20, AlignLeft, AlignTop);
   view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
 }

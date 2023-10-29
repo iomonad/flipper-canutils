@@ -35,6 +35,9 @@ void canutils_scene_main_menu_callback_handler(void *context,
   const Application *app = (Application*)context;
 
   switch (index) {
+  case Select_Config:
+    scene_manager_handle_custom_event(app->scene_manager, Event_Config);
+    break;
   case Select_CanDump:
     scene_manager_handle_custom_event(app->scene_manager, Event_CanDump);
     break;
