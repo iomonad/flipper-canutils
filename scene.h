@@ -32,6 +32,8 @@
 #include <gui/modules/menu.h>
 #include <gui/modules/popup.h>
 
+#include <mcp2515.h>
+#include <canutils.h>
 #include <views.h>
 #include <events.h>
 
@@ -51,20 +53,18 @@ typedef enum {
   ViewScene_Total
 } ApplicationScene;
 
-
 typedef enum {
   View_Menu,
   View_Popup
 } ApplicationView;
 
-
 typedef struct {
-  SceneManager   *scene_manager;
-  ViewDispatcher *view_dispatcher;
-  Menu           *menu;
-  Popup          *popup;
+  SceneManager         *scene_manager;
+  ViewDispatcher       *view_dispatcher;
+  Menu                 *menu;
+  Popup                *popup;
+  FuriHalSpiBusHandle  mcp_handle;
 } Application;
-
 
 typedef enum {
   Event_CanDump,

@@ -61,6 +61,23 @@ FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
   }
 }
 
+/** Release MCP2515 driver
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     boolean status
+ */
+bool mcp2515_release_driver(FuriHalSpiBusHandle *handle) {
+  if (handle) {
+    FURI_LOG_I(TAG, "mcp2515 driver cleanup");
+    furi_hal_spi_release(handle);
+    furi_hal_spi_bus_handle_deinit(handle);
+
+    return true;
+  }
+  return false;
+}
+
 /** Read MCP2515 register through SPI
  *
  * @param      handle  - pointer to FuriHalSpiHandle

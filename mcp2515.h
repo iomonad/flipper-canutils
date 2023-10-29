@@ -481,4 +481,20 @@ typedef struct {
 static const mcp_txbn_regs_t TXB[N_TXBUFFERS];
 static const mcp_rxbn_regs_t RXB[N_RXBUFFERS];
 
+/* PROTOS */
+
+FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle);
+bool mcp2515_release_driver(FuriHalSpiBusHandle *handle);
+mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle, const mcp_register_t reg, uint8_t *results);
+mcp_results_t mcp2515_reg_write(FuriHalSpiBusHandle* handle, const mcp_register_t reg, const uint8_t data);
+mcp_results_t mcp2515_reg_modify(FuriHalSpiBusHandle* handle, const mcp_register_t reg, const uint8_t mask, const uint8_t data);
+mcp_results_t mcp2515_set_mode(FuriHalSpiBusHandle* handle, const mcp_canctrl_reqop_mode_t mode);
+mcp_results_t mcp2525_set_config_mode(FuriHalSpiBusHandle* handle);
+mcp_results_t mcp2515_set_listen_only_mode(FuriHalSpiBusHandle* handle);
+mcp_results_t mcp2515_set_sleep_mode(FuriHalSpiBusHandle* handle);
+mcp_results_t mcp2515_set_loopback_mode(FuriHalSpiBusHandle* handle);
+mcp_results_t mcp2515_set_normal_mode(FuriHalSpiBusHandle* handle);
+mcp_results_t mcp2515_set_bitrate(FuriHalSpiBusHandle* handle, const mcp_can_speed_t bitrate, const can_clock_t *clock);
+bool mcp2515_have_errors(FuriHalSpiBusHandle* handle);
+
 #endif // __MCP2515_H__

@@ -26,6 +26,7 @@
 
 #include <scene.h>
 #include <canutils.h>
+#include <mcp2515.h>
 
 static Application *canutils_context_setup(void) {
   FURI_LOG_I(TAG, "canutils_context_setup");
@@ -37,6 +38,9 @@ static Application *canutils_context_setup(void) {
 
   canutils_scene_manager_init(app);
   canutils_view_dispatcher_init(app);
+
+  /* Initialize MCP2515 with default external preset */
+  app->mcp_handle = mcp2515_register_driver(NULL);
   return app;
 }
 
@@ -59,18 +63,29 @@ static void canutils_context_free(Application *app) {
     popup_free(app->popup);
   }
 
+  if (&(app->mcp_handle)) {
+    mcp2515_release_driver(&(app->mcp_handle));
+  }
+
   free(app);
 }
 
 int32_t canutils_app(void* p) {
   UNUSED(p);
 
-  Application *app = canutils_context_setup();
-  Gui         *gui = furi_record_open(RECORD_GUI);
+  Application          *app = canutils_context_setup();
+  Gui                  *gui = furi_record_open(RECORD_GUI);
+
+  if (mcp2515_have_errors(&(app->mcp_handle))) {
+    FURI_LOG_I(TAG, "mcp2515 have errors");
+  } else {
+    FURI_LOG_I(TAG, "mcp2515 is ok");
+  }
 
   view_dispatcher_attach_to_gui(app->view_dispatcher, gui, ViewDispatcherTypeFullscreen);
   scene_manager_next_scene(app->scene_manager, ViewScene_Menu);
   view_dispatcher_run(app->view_dispatcher);
+
 
   furi_record_close(RECORD_GUI);
   canutils_context_free(app);
