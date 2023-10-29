@@ -24,6 +24,8 @@
  */
 
 #include <furi.h>
+#include <furi_hal_power.h>
+#include <furi_hal_usb.h>
 #include <furi_hal_resources.h>
 #include <furi_hal_spi.h>
 #include <furi_hal_spi_types.h>
@@ -48,6 +50,9 @@
 FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
 
   FURI_LOG_I(TAG, "mcp2515_register_driver");
+
+  /* Enable Board 5v */
+  furi_hal_power_enable_otg();
   if (handle == NULL) {
     FURI_LOG_I(TAG, "mcp2515_register_driver - using default external preset");
     furi_hal_spi_bus_handle_init(&furi_hal_spi_bus_handle_external);
@@ -68,6 +73,8 @@ FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
  * @return     boolean status
  */
 bool mcp2515_release_driver(FuriHalSpiBusHandle *handle) {
+  /* Disable Board 5v */
+  furi_hal_power_disable_otg();
   if (handle) {
     FURI_LOG_I(TAG, "mcp2515 driver cleanup");
     furi_hal_spi_release(handle);
@@ -544,9 +551,6 @@ bool mcp2515_have_errors(FuriHalSpiBusHandle* handle) {
 
   mcp2515_reg_read(handle, MCP_EFLG, &result);
 
-  if (result & MCP_EFLG_ERRORMASK) {
-    return true;
-  } else {
-    return false;
-  }
+  return result & MCP_EFLG_ERRORMASK
+    ? true : false;
 }
