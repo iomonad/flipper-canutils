@@ -5,7 +5,7 @@ App(
     name="CANUtils",  # Displayed in menus
     apptype=FlipperAppType.EXTERNAL,
     entry_point="canutils_app",
-    stack_size=2 * 1024,
+    stack_size=3 * 1024,
     fap_category="CAN",
     fap_version="0.1",
     fap_icon="canutils.png",  # 10x10 1-bit PNG

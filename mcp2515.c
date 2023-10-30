@@ -30,6 +30,7 @@
 #include <furi_hal_spi.h>
 #include <furi_hal_spi_types.h>
 #include <furi_hal_spi_config.h>
+#include <furi_hal_cortex.h>
 #include <assert.h>
 
 #include <canutils.h>
@@ -95,6 +96,42 @@ bool mcp2515_release_driver(FuriHalSpiBusHandle *handle) {
   return false;
 }
 
+
+/** Thin wrapper around furi SPI trx API
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ * @param      tx      - tx data
+ * @param      rx      - rx data
+ * @param      size    - data segment size
+ *
+ * @return     boolean status
+ */
+static bool mcp2515_spi_trx(FuriHalSpiBusHandle* handle,
+			    const uint8_t* tx,
+			    const uint8_t* rx,
+			    const uint8_t size) {
+
+  FuriHalCortexTimer timer = furi_hal_cortex_timer_get(MCP2515_TIMEOUT * 1000);
+
+  FURI_LOG_D(TAG, "mcp2515 - spi trx data");
+
+  while (furi_hal_gpio_read(handle->miso)) {
+    if (furi_hal_cortex_timer_is_expired(timer)) {
+      FURI_LOG_W(TAG, "mcp2515 - cortex timeout");
+      return false;
+    }
+  }
+
+  if (!furi_hal_spi_bus_trx(handle, (uint8_t*)tx, (uint8_t*)rx, size, MCP2515_TIMEOUT)) {
+
+    FURI_LOG_W(TAG, "mcp2515 - SPI tx timeout");
+    return false;
+  }
+
+  return true;
+}
+
+
 /** Read MCP2515 register through SPI
  *
  * @param      handle  - pointer to FuriHalSpiHandle
@@ -109,13 +146,13 @@ mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
   uint8_t tx[3] = { INSTRUCTION_READ , reg, 0 };
   mcp_results_t rx[2] = {0};
 
-  FURI_LOG_T(TAG, "mcp2515 - register read");
-  while (furi_hal_gpio_read(handle->miso))
-    ;
+  FURI_LOG_D(TAG, "mcp2515 - register read");
 
-  furi_hal_spi_bus_trx(handle, tx, (uint8_t*)rx, 3, MCP2515_TIMEOUT);
+  if (!mcp2515_spi_trx(handle, tx, (uint8_t*)rx, 3)) {
+    FURI_LOG_D(TAG, "mcp2515 - SPI write failure");
+  }
 
-  assert((rx[0].CHIP_RDYn) == 0x0);
+  assert(rx[0].CHIP_RDYn | rx[1].CHIP_RDYn == 0x0);
   *results = *(uint8_t*)&rx[1];
   return rx[0];
 }
@@ -136,13 +173,12 @@ mcp_results_t mcp2515_reg_write(FuriHalSpiBusHandle* handle,
   uint8_t tx[3] = { INSTRUCTION_WRITE, reg, data};
   mcp_results_t rx[2] = {0};
 
-  FURI_LOG_T(TAG, "mcp2515 - register write");
-  while (furi_hal_gpio_read(handle->miso))
-    ;
+  FURI_LOG_D(TAG, "mcp2515 - register write");
+  if (!mcp2515_spi_trx(handle, tx, (uint8_t*)rx, 3)) {
+    FURI_LOG_D(TAG, "mcp2515 - SPI write failure");
+  }
 
-  furi_hal_spi_bus_trx(handle, tx, (uint8_t*)rx, 3, MCP2515_TIMEOUT);
   assert((rx[0].CHIP_RDYn | rx[1].CHIP_RDYn) == 0x0);
-
   return rx[1];
 }
 
@@ -164,7 +200,7 @@ mcp_results_t mcp2515_reg_modify(FuriHalSpiBusHandle* handle,
   uint8_t tx[4] = { INSTRUCTION_BITMOD, reg, mask, data };
   mcp_results_t rx[2] = {0};
 
-  FURI_LOG_T(TAG, "mcp2515 - register modify");
+  FURI_LOG_D(TAG, "mcp2515 - register modify");
   while (furi_hal_gpio_read(handle->miso))
     ;
 
