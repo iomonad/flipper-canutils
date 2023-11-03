@@ -22,15 +22,5 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#ifndef __CONFIG_H__
-#define __CONFIG_H__
-
 #include <can.h>
 #include <mcp2515.h>
-
-typedef struct {
-  mcp_can_speed_t speed;
-  can_clock_t     clock;
-} can_preferences_t;
-
-#endif // __CONFIG_H__

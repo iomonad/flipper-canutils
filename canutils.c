@@ -28,6 +28,7 @@
 #include <canutils.h>
 #include <mcp2515.h>
 
+/* Application context Steup */
 static Application *canutils_context_setup(void) {
   FURI_LOG_I(TAG, "canutils_context_setup");
 
@@ -39,8 +40,16 @@ static Application *canutils_context_setup(void) {
   canutils_scene_manager_init(app);
   canutils_view_dispatcher_init(app);
 
-  /* Initialize MCP2515 with default external preset */
-  app->mcp_handle = mcp2515_register_driver(NULL);
+  /* Initialize models */
+  view_set_context(app->conf_model, app);
+  view_allocate_model(app->conf_model, ViewModelTypeLockFree, sizeof(can_preferences_t));
+
+  can_preferences_t *model = view_get_model(app->conf_model);
+  model->speed = 5;
+  model->clock = 0;
+
+  /* Initialize MCP2515 with NULL handler */
+  app->mcp_handle = NULL;
   return app;
 }
 
@@ -52,19 +61,25 @@ static void canutils_context_free(Application *app) {
 
   view_dispatcher_remove_view(app->view_dispatcher, View_Menu);
   view_dispatcher_remove_view(app->view_dispatcher, View_Popup);
+  view_dispatcher_remove_view(app->view_dispatcher, View_SubMenu);
+  view_dispatcher_remove_view(app->view_dispatcher, View_Widget);
+  view_dispatcher_remove_view(app->view_dispatcher, View_TextInput);
+  view_dispatcher_remove_view(app->view_dispatcher, View_VariableItemList);
+  view_dispatcher_remove_view(app->view_dispatcher, View_Models);
 
   view_dispatcher_free(app->view_dispatcher);
 
-  if (app->menu) {
-    menu_free(app->menu);
-  }
+  if (app->menu) { menu_free(app->menu); }
+  if (app->popup) { popup_free(app->popup); }
+  if (app->submenu) { submenu_free(app->submenu); }
+  if (app->widget) { widget_free(app->widget); }
+  if (app->text_input) { text_input_free(app->text_input); }
+  if (app->variable_item_list) { variable_item_list_free(app->variable_item_list); }
+  if (app->conf_model) { view_free(app->conf_model); }
 
-  if (app->popup) {
-    popup_free(app->popup);
-  }
-
-  if (&(app->mcp_handle)) {
-    mcp2515_release_driver(&(app->mcp_handle));
+  /* cleanup spi handle if associated */
+  if (app->mcp_handle) {
+    mcp2515_release_driver(app->mcp_handle);
   }
 
   free(app);
@@ -75,12 +90,6 @@ int32_t canutils_app(void* p) {
 
   Application          *app = canutils_context_setup();
   Gui                  *gui = furi_record_open(RECORD_GUI);
-
-  if (mcp2515_have_errors(&(app->mcp_handle))) {
-    FURI_LOG_I(TAG, "mcp2515 have errors");
-  } else {
-    FURI_LOG_I(TAG, "mcp2515 is ok");
-  }
 
   view_dispatcher_attach_to_gui(app->view_dispatcher, gui, ViewDispatcherTypeFullscreen);
   scene_manager_next_scene(app->scene_manager, ViewScene_Menu);

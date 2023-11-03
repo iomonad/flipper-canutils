@@ -110,12 +110,26 @@ void canutils_view_dispatcher_init(Application *app) {
 
   app->menu = menu_alloc();
   app->popup = popup_alloc();
+  app->submenu = submenu_alloc();
+  app->widget = widget_alloc();
+  app->text_input = text_input_alloc();
+  app->variable_item_list = variable_item_list_alloc();
+  app->conf_model = view_alloc();
 
   view_dispatcher_set_event_callback_context(app->view_dispatcher, app);
   view_dispatcher_set_custom_event_callback(app->view_dispatcher,
 					    canutils_scene_manager_custom_event_callback);
   view_dispatcher_set_navigation_event_callback(app->view_dispatcher,
 						canutils_scene_manager_navigation_event_callback);
+
+  /* View Dispatcher */
   view_dispatcher_add_view(app->view_dispatcher, View_Menu,  menu_get_view(app->menu));
   view_dispatcher_add_view(app->view_dispatcher, View_Popup, popup_get_view(app->popup));
+  view_dispatcher_add_view(app->view_dispatcher, View_SubMenu, submenu_get_view(app->submenu));
+  view_dispatcher_add_view(app->view_dispatcher, View_Widget, widget_get_view(app->widget));
+  view_dispatcher_add_view(app->view_dispatcher, View_TextInput, text_input_get_view(app->text_input));
+  view_dispatcher_add_view(app->view_dispatcher, View_VariableItemList,
+			   variable_item_list_get_view(app->variable_item_list));
+
+  view_dispatcher_add_view(app->view_dispatcher, View_Models, app->conf_model);
 }

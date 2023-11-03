@@ -201,13 +201,13 @@
 #define MCP_20MHz_33k3BPS_CFG3 (0x87)
 
 typedef enum {
-  MCP_20MHZ,
+  MCP_20MHZ = 0x0,
   MCP_16MHZ,
   MCP_8MHZ
 } can_clock_t;
 
 typedef enum {
-  CAN_5KBPS,
+  CAN_5KBPS = 0x0,
   CAN_10KBPS,
   CAN_20KBPS,
   CAN_31K25BPS,

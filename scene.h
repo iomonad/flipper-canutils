@@ -26,11 +26,16 @@
 #define __SCENE_H__
 
 #include <gui/gui.h>
+#include <gui/view.h>
 #include <gui/icon_i.h>
 #include <gui/view_dispatcher.h>
 #include <gui/scene_manager.h>
 #include <gui/modules/menu.h>
 #include <gui/modules/popup.h>
+#include <gui/modules/widget.h>
+#include <gui/modules/submenu.h>
+#include <gui/modules/text_input.h>
+#include <gui/modules/variable_item_list.h>
 
 #include <mcp2515.h>
 #include <canutils.h>
@@ -56,15 +61,28 @@ typedef enum {
 
 typedef enum {
   View_Menu,
-  View_Popup
+  View_Popup,
+  View_SubMenu,
+  View_Widget,
+  View_TextInput,
+  View_VariableItemList,
+  View_Models
 } ApplicationView;
+
+/* Application Context */
 
 typedef struct {
   SceneManager         *scene_manager;
   ViewDispatcher       *view_dispatcher;
   Menu                 *menu;
   Popup                *popup;
-  FuriHalSpiBusHandle  mcp_handle;
+  Submenu              *submenu;
+  Widget               *widget;
+  TextInput            *text_input;
+  VariableItemList     *variable_item_list;
+  View                 *conf_model;
+
+  FuriHalSpiBusHandle  *mcp_handle;
 } Application;
 
 typedef enum {
