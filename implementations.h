@@ -22,34 +22,13 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#include <scene.h>
 #include <canutils.h>
 
-#include <implementations.h>
+/* MAIN MENU */
+bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event);
+void canutils_scene_on_exit_main_menu(void* context);
 
-/* DEFAULT VIEW */
-void unimplemented_view(void* context) {
-  Application *app = (Application*)context;
+void canutils_scene_on_enter_main_menu(void *context);
 
-  popup_reset(app->popup);
-  popup_set_context(app->popup, app);
-
-  popup_set_header(app->popup, "Unimplemented", 64, 10, AlignCenter, AlignTop);
-  popup_set_icon(app->popup, 5, 10, &I_cvc_36x36);
-  popup_set_text(app->popup, "Unimplemented", 64, 20, AlignLeft, AlignTop);
-  view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
-}
-
-void (*const canutils_scene_on_enter_handlers[])(void*) = {
-  canutils_scene_on_enter_main_menu,
-  canutils_scene_on_enter_configuration,
-  unimplemented_view, // CanDump
-  unimplemented_view, // CanPlayer
-  unimplemented_view, // CanSend
-  unimplemented_view, // CanGen
-  unimplemented_view, // CanSequence
-  unimplemented_view, // CanSniffer
-  unimplemented_view, // CanBusLoad
-  unimplemented_view, // CanCalcBitTiming
-  unimplemented_view, // CanFdTest
-};
+/* CONFIGURATION */
+void canutils_scene_on_enter_configuration(void *context);

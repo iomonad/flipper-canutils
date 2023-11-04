@@ -25,72 +25,7 @@
 #include <scene.h>
 #include <canutils.h>
 
-/* MAIN MENU*/
-
-bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
-  Application *app = (Application*)context;
-  bool is_consumed = false;
-
-  switch (event.type) {
-  case SceneManagerEventTypeCustom: {
-    switch (event.event) {
-    case Event_Config:
-      scene_manager_next_scene(app->scene_manager, ViewScene_Configuration);
-      is_consumed = true;
-      break;
-    case Event_CanDump:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
-      is_consumed = true;
-      break;
-    case Event_CanPlayer:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanPlayer);
-      is_consumed = true;
-      break;
-    case Event_CanSend:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanSend);
-      is_consumed = true;
-      break;
-    case Event_CanGen:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanGen);
-      is_consumed = true;
-      break;
-    case Event_CanSequence:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanSequence);
-      is_consumed = true;
-      break;
-    case Event_CanSniffer:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanSniffer);
-      is_consumed = true;
-      break;
-    case Event_CanBusLoad:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanBusLoad);
-      is_consumed = true;
-      break;
-    case Event_CanCalcBitTiming:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanCalcBitTiming);
-      is_consumed = true;
-      break;
-    case Event_CanFdTest:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
-      is_consumed = true;
-      break;
-    }
-    break;
-  }
-  default:
-    is_consumed = false;
-    break;
-  }
-  return is_consumed;
-}
-
-
-void canutils_scene_on_exit_main_menu(void* context) {
-  FURI_LOG_T(TAG, "canutils_scene_on_exit_main_menu");
-
-  Application* app = (Application*)context;
-  menu_reset(app->menu);
-}
+#include <implementations.h>
 
 /* UNIMPLEMENTED */
 
