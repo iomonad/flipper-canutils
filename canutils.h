@@ -28,6 +28,7 @@
 /* Load bitmaps */
 #include <canutils_icons.h>
 #include <config.h>
+#include <scene.h>
 
 #define TAG "canutils"
 

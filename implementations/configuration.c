@@ -22,7 +22,6 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#include <views.h>
 #include <scene.h>
 #include <canutils.h>
 #include <mcp2515.h>

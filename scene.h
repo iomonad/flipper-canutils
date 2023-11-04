@@ -39,8 +39,6 @@
 
 #include <mcp2515.h>
 #include <canutils.h>
-#include <views.h>
-#include <events.h>
 
 typedef enum {
   ViewScene_Menu = 0x0,
@@ -111,6 +109,11 @@ typedef enum {
   Select_CanCalcBitTiming,
   Select_CanFdTest
 } ApplicationSelection;
+
+
+extern bool (*const canutils_scene_on_event_handlers[])(void*, SceneManagerEvent);
+extern void (*const canutils_scene_on_exit_handlers[])(void*);
+extern void (*const canutils_scene_on_enter_handlers[])(void*);
 
 static const SceneManagerHandlers ev_handler = {
   .on_enter_handlers = canutils_scene_on_enter_handlers,

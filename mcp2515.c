@@ -33,8 +33,8 @@
 #include <furi_hal_cortex.h>
 #include <assert.h>
 
-#include <canutils.h>
 #include <mcp2515.h>
+#include <canutils.h>
 
 /** Read MCP2515 register through SPI
  *

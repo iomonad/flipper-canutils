@@ -30,7 +30,6 @@
 #include <furi_hal_spi_config.h>
 
 #include <can.h>
-
 /*
  *  Speed 8M
  */
