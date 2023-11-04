@@ -495,5 +495,6 @@ mcp_results_t mcp2515_set_loopback_mode(FuriHalSpiBusHandle* handle);
 mcp_results_t mcp2515_set_normal_mode(FuriHalSpiBusHandle* handle);
 mcp_results_t mcp2515_set_bitrate(FuriHalSpiBusHandle* handle, const mcp_can_speed_t bitrate, const can_clock_t *clock);
 bool mcp2515_have_errors(FuriHalSpiBusHandle* handle);
+uint8_t mcp2515_read_status(FuriHalSpiBusHandle *handle);
 
 #endif // __MCP2515_H__

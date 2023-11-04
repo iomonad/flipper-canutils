@@ -48,8 +48,6 @@ static Application *canutils_context_setup(void) {
   model->speed = 5;
   model->clock = 0;
 
-  /* Initialize MCP2515 with NULL handler */
-  app->mcp_handle = NULL;
   return app;
 }
 
@@ -76,11 +74,6 @@ static void canutils_context_free(Application *app) {
   if (app->text_input) { text_input_free(app->text_input); }
   if (app->variable_item_list) { variable_item_list_free(app->variable_item_list); }
   if (app->conf_model) { view_free(app->conf_model); }
-
-  /* cleanup spi handle if associated */
-  if (app->mcp_handle) {
-    mcp2515_release_driver(app->mcp_handle);
-  }
 
   free(app);
 }

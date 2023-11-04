@@ -81,7 +81,7 @@ typedef struct {
   VariableItemList     *variable_item_list;
   View                 *conf_model;
 
-  FuriHalSpiBusHandle  *mcp_handle;
+  FuriHalSpiBusHandle  mcp_handle;
 } Application;
 
 typedef enum {

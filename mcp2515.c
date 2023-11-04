@@ -68,12 +68,14 @@ FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
     FURI_LOG_I(TAG, "mcp2515_register_driver - using default external preset");
     furi_hal_spi_bus_handle_init(&furi_hal_spi_bus_handle_external);
     furi_hal_spi_acquire(&furi_hal_spi_bus_handle_external);
-    return (furi_hal_spi_bus_handle_external);
+
+    return furi_hal_spi_bus_handle_external;
   } else {
     FURI_LOG_I(TAG, "mcp2515_register_driver - using custom handle");
     furi_hal_spi_bus_handle_init(handle);
     furi_hal_spi_acquire(handle);
-    return (furi_hal_spi_bus_handle_external);
+
+    return *handle;
   }
 }
 
@@ -84,6 +86,9 @@ FuriHalSpiBusHandle mcp2515_register_driver(FuriHalSpiBusHandle *handle) {
  * @return     boolean status
  */
 bool mcp2515_release_driver(FuriHalSpiBusHandle *handle) {
+
+  FURI_LOG_I(TAG, "mcp2515 driver cleanup %p", handle);
+
   /* Disable Board 5v */
   furi_hal_power_disable_otg();
   if (handle) {
@@ -146,7 +151,7 @@ mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
   uint8_t tx[3] = { INSTRUCTION_READ , reg, 0 };
   mcp_results_t rx[2] = {0};
 
-  FURI_LOG_D(TAG, "mcp2515 - register read");
+  FURI_LOG_I(TAG, "mcp2515 - register read %d", reg);
 
   if (!mcp2515_spi_trx(handle, tx, (uint8_t*)rx, 3)) {
     FURI_LOG_D(TAG, "mcp2515 - SPI write failure");
@@ -154,6 +159,10 @@ mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
 
   assert(rx[0].CHIP_RDYn | rx[1].CHIP_RDYn == 0x0);
   *results = *(uint8_t*)&rx[1];
+
+  FURI_LOG_D(TAG, "mcp2515 - register read %d - %d",
+	     rx[0].FIFO_BYTES_AVAILABLE,
+	     rx[1].FIFO_BYTES_AVAILABLE);
   return rx[0];
 }
 
@@ -591,12 +600,32 @@ mcp_results_t mcp2515_set_bitrate(FuriHalSpiBusHandle* handle,
  *
  * @return     boolean
  */
-bool mcp2515_have_errors(FuriHalSpiBusHandle* handle) {
+bool mcp2515_have_errors(FuriHalSpiBusHandle *handle) {
 
-  uint8_t result = 0x0;
+  uint8_t result;
 
   mcp2515_reg_read(handle, MCP_EFLG, &result);
 
+  FURI_LOG_I(TAG, "reg read results %d", result);
+
   return result & MCP_EFLG_ERRORMASK
     ? true : false;
+}
+
+/** Read BUS Status
+ *
+ * @param      handle  - pointer to FuriHalSpiHandle
+ *
+ * @return     uint8_t status
+ */
+uint8_t mcp2515_read_status(FuriHalSpiBusHandle *handle) {
+
+  uint8_t tx[2] = { INSTRUCTION_READ_STATUS, 0 };
+  mcp_results_t rx[1];
+
+  if (!mcp2515_spi_trx(handle, tx, (uint8_t*)rx, 2)) {
+    FURI_LOG_D(TAG, "mcp2515 - SPI write failure");
+  }
+
+  return rx[0].FIFO_BYTES_AVAILABLE;
 }
