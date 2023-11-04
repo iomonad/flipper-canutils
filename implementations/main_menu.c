@@ -25,7 +25,14 @@
 #include <scene.h>
 #include <canutils.h>
 
-/* MAIN MENU*/
+/**
+ * ___________                    __
+ * \_   _____/__  __ ____   _____/  |_
+ *  |    __)_\  \/ // __ \ /    \   __\
+ *  |        \\   /\  ___/|   |  \  |
+ * /_______  / \_/  \___  >___|  /__|
+ *         \/           \/     \/
+ */
 
 bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
   Application *app = (Application*)context;
@@ -71,7 +78,11 @@ bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
       is_consumed = true;
       break;
     case Event_CanFdTest:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanFdTest);
+      is_consumed = true;
+      break;
+    case Event_CanProbe:
+      scene_manager_next_scene(app->scene_manager, ViewScene_CanProbe);
       is_consumed = true;
       break;
     }
@@ -84,6 +95,15 @@ bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
   return is_consumed;
 }
 
+/**
+ * ___________      .__  __
+ * \_   _____/__  __|__|/  |_
+ *  |    __)_\  \/  /  \   __\
+ *  |        \>    <|  ||  |
+ * /_______  /__/\_ \__||__|
+ *         \/      \/
+ *
+ */
 
 void canutils_scene_on_exit_main_menu(void* context) {
   FURI_LOG_T(TAG, "canutils_scene_on_exit_main_menu");
@@ -92,6 +112,14 @@ void canutils_scene_on_exit_main_menu(void* context) {
   menu_reset(app->menu);
 }
 
+/**
+ * ____   ____.__
+ * \   \ /   /|__| ______  _  __
+ *  \   Y   / |  |/ __ \ \/ \/ /
+ *   \     /  |  \  ___/\     /
+ *    \___/   |__|\___  >\/\_/
+ *                    \/
+ */
 
 void canutils_scene_on_enter_main_menu(void *context) {
   Application *app = (Application*)context;
@@ -108,6 +136,7 @@ void canutils_scene_on_enter_main_menu(void *context) {
   menu_add_item(app->menu, "CAN BusLoad", NULL, Select_CanBusLoad, canutils_scene_main_menu_callback_handler, app);
   menu_add_item(app->menu, "CAN CalcBitTiming", NULL, Select_CanCalcBitTiming, canutils_scene_main_menu_callback_handler, app);
   menu_add_item(app->menu, "CAN FdTest", NULL, Select_CanFdTest, canutils_scene_main_menu_callback_handler, app);
+  menu_add_item(app->menu, "CAN Probe", NULL, Select_CanProbe, canutils_scene_main_menu_callback_handler, app);
 
   view_dispatcher_switch_to_view(app->view_dispatcher, ViewScene_Menu);
 }

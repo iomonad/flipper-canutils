@@ -27,56 +27,35 @@
 
 #include <implementations.h>
 
-/* UNIMPLEMENTED */
-
-static bool unimplemented_on_event(void *context,
-				   SceneManagerEvent event) {
-  Application* app = (Application*)context;
-
-  UNUSED(app);
-  UNUSED(context);
-  UNUSED(event);
-
-
-  return false;
-}
-
-static void unimplemented_on_exit(void *context) {
-  Application* app = (Application*)context;
-
-  UNUSED(app);
-  popup_reset(app->popup);
-}
-
-
 /* Implementations */
 
-
 bool (*const canutils_scene_on_event_handlers[])(void*, SceneManagerEvent) = {
-  canutils_scene_on_event_main_menu,
-  unimplemented_on_event, // Configuration
-  unimplemented_on_event, // CanDump
-  unimplemented_on_event, // CanPlayer
-  unimplemented_on_event, // CanSend
-  unimplemented_on_event, // CanGen
-  unimplemented_on_event, // CanSequence
-  unimplemented_on_event, // CanSniffer
-  unimplemented_on_event, // CanBusLoad
-  unimplemented_on_event, // CanCalcBitTiming
-  unimplemented_on_event, // CanFdTest
+  canutils_scene_on_event_main_menu, // Main Menu
+  canutils_scene_on_event_configuration, // Configuration
+  canutils_scene_on_event_can_dump, // CanDump
+  canutils_scene_on_event_can_player, // CanPlayer
+  canutils_scene_on_event_can_send, // CanSend
+  canutils_scene_on_event_can_gen, // CanGen
+  canutils_scene_on_event_can_sequence, // CanSequence
+  canutils_scene_on_event_can_sniffer, // CanSniffer
+  canutils_scene_on_event_can_busload, // CanBusLoad
+  canutils_scene_on_event_can_calcbittiming, // CanCalcBitTiming
+  canutils_scene_on_event_can_fdtest, // CanFdTest
+  canutils_scene_on_event_can_probe, // CanProbe
 };
 
 
 void (*const canutils_scene_on_exit_handlers[])(void*) = {
-  canutils_scene_on_exit_main_menu,
-  unimplemented_on_exit, // Configuration
-  unimplemented_on_exit, // CanDump
-  unimplemented_on_exit, // CanPlayer
-  unimplemented_on_exit, // CanSend
-  unimplemented_on_exit, // CanGen
-  unimplemented_on_exit, // CanSequence
-  unimplemented_on_exit, // CanSniffer
-  unimplemented_on_exit, // CanBusLoad
-  unimplemented_on_exit, // CanCalcBitTiming
-  unimplemented_on_exit, // CanFdTest
+  canutils_scene_on_exit_main_menu, // Main Menu
+  canutils_scene_on_exit_configuration, // Configuration
+  canutils_scene_on_exit_can_dump, // CanDump
+  canutils_scene_on_exit_can_player, // CanPlayer
+  canutils_scene_on_exit_can_send, // CanSend
+  canutils_scene_on_exit_can_gen, // CanGen
+  canutils_scene_on_exit_can_sequence, // CanSequence
+  canutils_scene_on_exit_can_sniffer, // CanSniffer
+  canutils_scene_on_exit_can_busload, // CanBusLoad
+  canutils_scene_on_exit_can_calcbittiming, // CanCalcBitTiming
+  canutils_scene_on_exit_can_fdtest, // CanFdTest
+  canutils_scene_on_exit_can_probe, // CanProbe
 };

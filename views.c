@@ -27,29 +27,17 @@
 
 #include <implementations.h>
 
-/* DEFAULT VIEW */
-void unimplemented_view(void* context) {
-  Application *app = (Application*)context;
-
-  popup_reset(app->popup);
-  popup_set_context(app->popup, app);
-
-  popup_set_header(app->popup, "Unimplemented", 64, 10, AlignCenter, AlignTop);
-  popup_set_icon(app->popup, 5, 10, &I_cvc_36x36);
-  popup_set_text(app->popup, "Unimplemented", 64, 20, AlignLeft, AlignTop);
-  view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
-}
-
 void (*const canutils_scene_on_enter_handlers[])(void*) = {
-  canutils_scene_on_enter_main_menu,
-  canutils_scene_on_enter_configuration,
-  unimplemented_view, // CanDump
-  unimplemented_view, // CanPlayer
-  unimplemented_view, // CanSend
-  unimplemented_view, // CanGen
-  unimplemented_view, // CanSequence
-  unimplemented_view, // CanSniffer
-  unimplemented_view, // CanBusLoad
-  unimplemented_view, // CanCalcBitTiming
-  unimplemented_view, // CanFdTest
+  canutils_scene_on_enter_main_menu, // MainMenu
+  canutils_scene_on_enter_configuration, // Configuration
+  canutils_scene_on_enter_can_dump, // CanDump
+  canutils_scene_on_enter_can_player, // CanPlayer
+  canutils_scene_on_enter_can_send, // CanSend
+  canutils_scene_on_enter_can_gen, // CanGen
+  canutils_scene_on_enter_can_sequence, // CanSequence
+  canutils_scene_on_enter_can_sniffer, // CanSniffer
+  canutils_scene_on_enter_can_busload, // CanBusLoad
+  canutils_scene_on_enter_can_calcbittiming, // CanCalcBitTiming
+  canutils_scene_on_enter_can_fdtest, // CanFdTest
+  canutils_scene_on_enter_can_probe, // CanProbe
 };

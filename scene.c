@@ -65,9 +65,12 @@ void canutils_scene_main_menu_callback_handler(void *context,
   case Select_CanFdTest:
     scene_manager_handle_custom_event(app->scene_manager, Event_CanFdTest);
     break;
+  case Select_CanProbe:
+    scene_manager_handle_custom_event(app->scene_manager, Event_CanProbe);
+    break;
   default:
     /* Fallback? */
-    scene_manager_handle_custom_event(app->scene_manager, Event_CanDump);
+    scene_manager_handle_custom_event(app->scene_manager, Event_Config);
     break;
   }
 }

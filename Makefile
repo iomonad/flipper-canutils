@@ -8,3 +8,4 @@ debug:
 	$(CC) blackmagic BLACKMAGIC=
 clean:
 	$(CC) -c
+re: clean all

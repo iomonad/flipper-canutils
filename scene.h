@@ -53,6 +53,7 @@ typedef enum {
   ViewScene_CanBusLoad,
   ViewScene_CanCalcBitTiming,
   ViewScene_CanFdTest,
+  ViewScene_CanProbe,
 
   ViewScene_Total
 } ApplicationScene;
@@ -94,6 +95,7 @@ typedef enum {
   Event_CanBusLoad,
   Event_CanCalcBitTiming,
   Event_CanFdTest,
+  Event_CanProbe
 } ApplicationEvents;
 
 
@@ -107,7 +109,8 @@ typedef enum {
   Select_CanSniffer,
   Select_CanBusLoad,
   Select_CanCalcBitTiming,
-  Select_CanFdTest
+  Select_CanFdTest,
+  Select_CanProbe
 } ApplicationSelection;
 
 
