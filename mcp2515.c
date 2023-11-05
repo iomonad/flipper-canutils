@@ -91,6 +91,7 @@ bool mcp2515_release_driver(FuriHalSpiBusHandle *handle) {
 
   /* Disable Board 5v */
   furi_hal_power_disable_otg();
+
   if (handle) {
     FURI_LOG_I(TAG, "mcp2515 driver cleanup");
     furi_hal_spi_release(handle);
@@ -112,13 +113,15 @@ bool mcp2515_release_driver(FuriHalSpiBusHandle *handle) {
  * @return     boolean status
  */
 static bool mcp2515_spi_trx(FuriHalSpiBusHandle* handle,
-			    const uint8_t* tx,
-			    const uint8_t* rx,
+			    uint8_t* tx,
+			    uint8_t* rx,
 			    const uint8_t size) {
 
   FuriHalCortexTimer timer = furi_hal_cortex_timer_get(MCP2515_TIMEOUT * 1000);
 
-  FURI_LOG_D(TAG, "mcp2515 - spi trx data");
+  for (size_t i = 0; tx[i]; i++) {
+    FURI_LOG_I(TAG, "mcp2515 TX - %x", tx[i]);
+  }
 
   while (furi_hal_gpio_read(handle->miso)) {
     if (furi_hal_cortex_timer_is_expired(timer)) {
@@ -127,12 +130,15 @@ static bool mcp2515_spi_trx(FuriHalSpiBusHandle* handle,
     }
   }
 
-  if (!furi_hal_spi_bus_trx(handle, (uint8_t*)tx, (uint8_t*)rx, size, MCP2515_TIMEOUT)) {
-
+  furi_hal_gpio_write(handle->cs, false);
+  if (!furi_hal_spi_bus_trx(handle, tx, rx, size, MCP2515_TIMEOUT)) {
     FURI_LOG_W(TAG, "mcp2515 - SPI tx timeout");
+
+    furi_hal_gpio_write(handle->cs, true);
     return false;
   }
 
+  furi_hal_gpio_write(handle->cs, true);
   return true;
 }
 
@@ -151,18 +157,12 @@ mcp_results_t mcp2515_reg_read(FuriHalSpiBusHandle* handle,
   uint8_t tx[3] = { INSTRUCTION_READ , reg, 0 };
   mcp_results_t rx[2] = {0};
 
-  FURI_LOG_I(TAG, "mcp2515 - register read %d", reg);
-
   if (!mcp2515_spi_trx(handle, tx, (uint8_t*)rx, 3)) {
     FURI_LOG_D(TAG, "mcp2515 - SPI write failure");
   }
 
   assert(rx[0].CHIP_RDYn | rx[1].CHIP_RDYn == 0x0);
   *results = *(uint8_t*)&rx[1];
-
-  FURI_LOG_D(TAG, "mcp2515 - register read %d - %d",
-	     rx[0].FIFO_BYTES_AVAILABLE,
-	     rx[1].FIFO_BYTES_AVAILABLE);
   return rx[0];
 }
 
@@ -621,11 +621,12 @@ bool mcp2515_have_errors(FuriHalSpiBusHandle *handle) {
 uint8_t mcp2515_read_status(FuriHalSpiBusHandle *handle) {
 
   uint8_t tx[2] = { INSTRUCTION_READ_STATUS, 0 };
-  mcp_results_t rx[1];
+  uint8_t rx[2] = {0};
 
-  if (!mcp2515_spi_trx(handle, tx, (uint8_t*)rx, 2)) {
+
+  if (!mcp2515_spi_trx(handle, tx, rx, 2)) {
     FURI_LOG_D(TAG, "mcp2515 - SPI write failure");
   }
 
-  return rx[0].FIFO_BYTES_AVAILABLE;
+  return rx[0];
 }
