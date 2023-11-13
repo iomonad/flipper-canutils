@@ -3,3 +3,4 @@
 ** TODO Implement Can Dump screen
 * Extra Parts
 ** TODO Implement CanOpen standard debug tools
+** TODO Design a board
