@@ -84,8 +84,3 @@ void canutils_scene_on_enter_can_calcbittiming(void *context);
 bool canutils_scene_on_event_can_fdtest(void *context, SceneManagerEvent event);
 void canutils_scene_on_exit_can_fdtest(void *context);
 void canutils_scene_on_enter_can_fdtest(void *context);
-
-/* can_probe */
-bool canutils_scene_on_event_can_probe(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_probe(void *context);
-void canutils_scene_on_enter_can_probe(void *context);
