@@ -6,8 +6,9 @@ name: "FAP: Build for multiple SDK sources"
 on:
   push:
     ## put your main branch name under "branches"
-    #branches: 
-    #  - master 
+    branches: 
+      - master 
+      - devel
   pull_request:
   schedule: 
     # do a build every day
