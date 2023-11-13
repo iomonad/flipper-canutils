@@ -1,2 +1,5 @@
-* TODO Implement Can Probe screen
-* TODO Implement Can Dump screen
+* Functional Part
+** TODO Implement Can Probe screen
+** TODO Implement Can Dump screen
+* Extra Parts
+** TODO Implement CanOpen standard debug tools
