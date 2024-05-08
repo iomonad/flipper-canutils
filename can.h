@@ -63,5 +63,4 @@ struct can_frame {
   __u8    data[CAN_MAX_DLEN] __attribute__((aligned(8)));
 };
 
-
 #endif // __CAN_H__
