@@ -1,20 +1,11 @@
 # Flipper CANutils [![FAP: Build for multiple SDK sources](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml/badge.svg)](https://github.com/iomonad/flipper-canutils/actions/workflows/build.yml)
-Leverage Flipper Zero SPI ports to interact with MCP2515 and provide CANbus Sniss Knife inside your pocket
-
-## Wiring
-
-```
-[A6] <--> MISO
-[A7] <--> MOSI
-[B3] <--> SCK
-[A4] <--> CS
-```
+Leverage Flipper Zero SPI ports to interact with MCP2518FD and provide CANbus Sniss Knife inside your pocket
 
 ## Building
 
 ```
-make
-make launch
+make toolchain
+make install
 ```
 
 ## Resources

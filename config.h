@@ -28,9 +28,9 @@
 #include <can.h>
 
 typedef struct {
-     //mcp_can_speed_t speed;
-     //can_clock_t     clock;
-     bool            is_loopback;
+    //mcp_can_speed_t speed;
+    //can_clock_t     clock;
+    bool is_loopback;
 } can_preferences_t;
 
 #endif // __CONFIG_H__

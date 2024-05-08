@@ -50,11 +50,7 @@
 /*   "8Mhz" */
 /* }; */
 
-static char *mcp_loopback_names[] = {
-  "False",
-  "True"
-};
-
+static char* mcp_loopback_names[] = {"False", "True"};
 
 /**
  * ___________                    __
@@ -65,14 +61,12 @@ static char *mcp_loopback_names[] = {
  *         \/           \/     \/
  */
 
-bool canutils_scene_on_event_configuration(void *context,
-					   SceneManagerEvent event) {
-  UNUSED(context);
-  UNUSED(event);
+bool canutils_scene_on_event_configuration(void* context, SceneManagerEvent event) {
+    UNUSED(context);
+    UNUSED(event);
 
-  return false;
+    return false;
 }
-
 
 /**
  * ___________      .__  __
@@ -84,10 +78,10 @@ bool canutils_scene_on_event_configuration(void *context,
  *
  */
 
-void canutils_scene_on_exit_configuration(void *context) {
-  Application *app = (Application*)context;
+void canutils_scene_on_exit_configuration(void* context) {
+    Application* app = (Application*)context;
 
-  UNUSED(app);
+    UNUSED(app);
 }
 
 /**
@@ -123,57 +117,57 @@ void canutils_scene_on_exit_configuration(void *context) {
 /*   //model->clock = index; */
 /* } */
 
-static void option_loopback_change(VariableItem *item) {
-  Application* app = variable_item_get_context(item);
-  uint8_t index = variable_item_get_current_value_index(item);
-  variable_item_set_current_value_text(item, mcp_loopback_names[index]);
+static void option_loopback_change(VariableItem* item) {
+    Application* app = variable_item_get_context(item);
+    uint8_t index = variable_item_get_current_value_index(item);
+    variable_item_set_current_value_text(item, mcp_loopback_names[index]);
 
-  FURI_LOG_T(TAG, "models changed");
+    FURI_LOG_T(TAG, "models changed");
 
-  can_preferences_t *model = view_get_model(app->conf_model);
-  model->is_loopback = index;
+    can_preferences_t* model = view_get_model(app->conf_model);
+    model->is_loopback = index;
 }
 
-
 /* View Setup */
-void canutils_scene_on_enter_configuration(void *context) {
-  Application *app = (Application*)context;
-  can_preferences_t* model = view_get_model(app->conf_model);
-  VariableItem* item = NULL;
+void canutils_scene_on_enter_configuration(void* context) {
+    Application* app = (Application*)context;
+    can_preferences_t* model = view_get_model(app->conf_model);
+    VariableItem* item = NULL;
 
-  variable_item_list_reset(app->variable_item_list);
-  variable_item_list_add(app->variable_item_list, "CANUtils Configuration", 0, NULL, NULL);
+    variable_item_list_reset(app->variable_item_list);
+    variable_item_list_add(app->variable_item_list, "CANUtils Configuration", 0, NULL, NULL);
 
-  /* /\* SPEED SETUP *\/ */
-  /* item = variable_item_list_add(app->variable_item_list, */
-  /* 					      "Bitrate", */
-  /* 					      COUNT_OF(mcp_speed_names), */
-  /* 					      option_speed_change, */
-  /* 					      app); */
-  /* uint8_t setting_speed_index = model->speed ; */
-  /* variable_item_set_current_value_index(item, setting_speed_index); */
-  /* variable_item_set_current_value_text(item, mcp_speed_names[setting_speed_index]); */
+    /* /\* SPEED SETUP *\/ */
+    /* item = variable_item_list_add(app->variable_item_list, */
+    /* 					      "Bitrate", */
+    /* 					      COUNT_OF(mcp_speed_names), */
+    /* 					      option_speed_change, */
+    /* 					      app); */
+    /* uint8_t setting_speed_index = model->speed ; */
+    /* variable_item_set_current_value_index(item, setting_speed_index); */
+    /* variable_item_set_current_value_text(item, mcp_speed_names[setting_speed_index]); */
 
-  /* /\* CLOCK SETUP *\/ */
-  /* item = variable_item_list_add(app->variable_item_list, */
-  /* 				"Clock", */
-  /* 				COUNT_OF(mcp_clock_names), */
-  /* 				option_clock_change, */
-  /* 				app); */
+    /* /\* CLOCK SETUP *\/ */
+    /* item = variable_item_list_add(app->variable_item_list, */
+    /* 				"Clock", */
+    /* 				COUNT_OF(mcp_clock_names), */
+    /* 				option_clock_change, */
+    /* 				app); */
 
-  /* uint8_t setting_clock_index = model->clock; */
-  /* variable_item_set_current_value_index(item, setting_clock_index); */
-  /* variable_item_set_current_value_text(item, mcp_clock_names[setting_clock_index]); */
+    /* uint8_t setting_clock_index = model->clock; */
+    /* variable_item_set_current_value_index(item, setting_clock_index); */
+    /* variable_item_set_current_value_text(item, mcp_clock_names[setting_clock_index]); */
 
-  /* LOOPBACK Mode */
-  item = variable_item_list_add(app->variable_item_list,
-				"Loopback",
-				COUNT_OF(mcp_loopback_names),
-				option_loopback_change,
-				app);
-  bool_sel_t setting_loopback_index = model->is_loopback;
-  variable_item_set_current_value_index(item, setting_loopback_index);
-  variable_item_set_current_value_text(item, mcp_loopback_names[setting_loopback_index]);
+    /* LOOPBACK Mode */
+    item = variable_item_list_add(
+        app->variable_item_list,
+        "Loopback",
+        COUNT_OF(mcp_loopback_names),
+        option_loopback_change,
+        app);
+    bool_sel_t setting_loopback_index = model->is_loopback;
+    variable_item_set_current_value_index(item, setting_loopback_index);
+    variable_item_set_current_value_text(item, mcp_loopback_names[setting_loopback_index]);
 
-  view_dispatcher_switch_to_view(app->view_dispatcher, View_VariableItemList);
+    view_dispatcher_switch_to_view(app->view_dispatcher, View_VariableItemList);
 }

@@ -26,9 +26,9 @@
 #ifndef __CAN_H__
 #define __CAN_H__
 
-typedef unsigned char  __u8;
+typedef unsigned char __u8;
 typedef unsigned short __u16;
-typedef unsigned long  __u32;
+typedef unsigned long __u32;
 
 /* special address description flags for the CAN_ID */
 #define CAN_EFF_FLAG 0x80000000UL /* EFF/SFF is set in the MSB */
@@ -50,17 +50,17 @@ typedef unsigned long  __u32;
  */
 typedef __u32 canid_t;
 
-#define CAN_SFF_ID_BITS     11
-#define CAN_EFF_ID_BITS     29
+#define CAN_SFF_ID_BITS 11
+#define CAN_EFF_ID_BITS 29
 
 /* CAN payload length and DLC definitions according to ISO 11898-1 */
 #define CAN_MAX_DLC 8
 #define CAN_MAX_DLEN 8
 
 struct can_frame {
-  canid_t can_id;  /* 32 bit CAN_ID + EFF/RTR/ERR flags */
-  __u8    can_dlc; /* frame payload length in byte (0 .. CAN_MAX_DLEN) */
-  __u8    data[CAN_MAX_DLEN] __attribute__((aligned(8)));
+    canid_t can_id; /* 32 bit CAN_ID + EFF/RTR/ERR flags */
+    __u8 can_dlc; /* frame payload length in byte (0 .. CAN_MAX_DLEN) */
+    __u8 data[CAN_MAX_DLEN] __attribute__((aligned(8)));
 };
 
 #endif // __CAN_H__

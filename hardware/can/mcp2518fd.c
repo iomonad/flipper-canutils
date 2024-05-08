@@ -22,19 +22,4 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#ifndef __CANUTILS_H__
-#define __CANUTILS_H__
-
-/* Load bitmaps */
-#include <canutils_icons.h>
-#include <config.h>
-#include <scene.h>
-
-#define TAG "canutils"
-
-typedef enum {
-    False = 0x0,
-    True,
-} bool_sel_t;
-
-#endif // __CANUTILS_H__
+#include "mcp2518fd.h"

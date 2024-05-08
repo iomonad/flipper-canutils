@@ -42,94 +42,91 @@
 #include <canutils.h>
 
 typedef enum {
-  ViewScene_Menu = 0x0,
+    ViewScene_Menu = 0x0,
 
-  ViewScene_Configuration,
-  ViewScene_CanDump,
-  ViewScene_CanPlayer,
-  ViewScene_CanSend,
-  ViewScene_CanGen,
-  ViewScene_CanSequence,
-  ViewScene_CanSniffer,
-  ViewScene_CanBusLoad,
-  ViewScene_CanCalcBitTiming,
-  ViewScene_CanFdTest,
-  ViewScene_CanProbe,
+    ViewScene_Configuration,
+    ViewScene_CanDump,
+    ViewScene_CanPlayer,
+    ViewScene_CanSend,
+    ViewScene_CanGen,
+    ViewScene_CanSequence,
+    ViewScene_CanSniffer,
+    ViewScene_CanBusLoad,
+    ViewScene_CanCalcBitTiming,
+    ViewScene_CanFdTest,
+    ViewScene_CanProbe,
 
-  ViewScene_Total
+    ViewScene_Total
 } ApplicationScene;
 
 typedef enum {
-  View_Menu,
-  View_Popup,
-  View_SubMenu,
-  View_Widget,
-  View_TextInput,
-  View_VariableItemList,
-  View_Models
+    View_Menu,
+    View_Popup,
+    View_SubMenu,
+    View_Widget,
+    View_TextInput,
+    View_VariableItemList,
+    View_Models
 } ApplicationView;
 
 /* Application Context */
 
 typedef struct {
-  SceneManager         *scene_manager;
-  ViewDispatcher       *view_dispatcher;
-  Menu                 *menu;
-  Popup                *popup;
-  Submenu              *submenu;
-  Widget               *widget;
-  TextInput            *text_input;
-  VariableItemList     *variable_item_list;
-  View                 *conf_model;
+    SceneManager* scene_manager;
+    ViewDispatcher* view_dispatcher;
+    Menu* menu;
+    Popup* popup;
+    Submenu* submenu;
+    Widget* widget;
+    TextInput* text_input;
+    VariableItemList* variable_item_list;
+    View* conf_model;
 
-  FuriHalSpiBusHandle  mcp_handle;
+    FuriHalSpiBusHandle mcp_handle;
 } Application;
 
 typedef enum {
-  Event_Config,
-  Event_CanDump,
-  Event_CanPlayer,
-  Event_CanSend,
-  Event_CanGen,
-  Event_CanSequence,
-  Event_CanSniffer,
-  Event_CanBusLoad,
-  Event_CanCalcBitTiming,
-  Event_CanFdTest,
-  Event_CanProbe
+    Event_Config,
+    Event_CanDump,
+    Event_CanPlayer,
+    Event_CanSend,
+    Event_CanGen,
+    Event_CanSequence,
+    Event_CanSniffer,
+    Event_CanBusLoad,
+    Event_CanCalcBitTiming,
+    Event_CanFdTest,
+    Event_CanProbe
 } ApplicationEvents;
 
-
 typedef enum {
-  Select_Config,
-  Select_CanDump,
-  Select_CanPlayer,
-  Select_CanSend,
-  Select_CanGen,
-  Select_CanSequence,
-  Select_CanSniffer,
-  Select_CanBusLoad,
-  Select_CanCalcBitTiming,
-  Select_CanFdTest,
-  Select_CanProbe
+    Select_Config,
+    Select_CanDump,
+    Select_CanPlayer,
+    Select_CanSend,
+    Select_CanGen,
+    Select_CanSequence,
+    Select_CanSniffer,
+    Select_CanBusLoad,
+    Select_CanCalcBitTiming,
+    Select_CanFdTest,
+    Select_CanProbe
 } ApplicationSelection;
-
 
 extern bool (*const canutils_scene_on_event_handlers[])(void*, SceneManagerEvent);
 extern void (*const canutils_scene_on_exit_handlers[])(void*);
 extern void (*const canutils_scene_on_enter_handlers[])(void*);
 
 static const SceneManagerHandlers ev_handler = {
-  .on_enter_handlers = canutils_scene_on_enter_handlers,
-  .on_event_handlers = canutils_scene_on_event_handlers,
-  .on_exit_handlers  = canutils_scene_on_exit_handlers,
-  .scene_num         = ViewScene_Total
-};
+    .on_enter_handlers = canutils_scene_on_enter_handlers,
+    .on_event_handlers = canutils_scene_on_event_handlers,
+    .on_exit_handlers = canutils_scene_on_exit_handlers,
+    .scene_num = ViewScene_Total};
 
 /* PROTO */
 
-void canutils_scene_main_menu_callback_handler(void *context, const uint32_t index);
-void canutils_scene_manager_init(Application *app);
-void canutils_view_dispatcher_init(Application *app);
+void canutils_scene_main_menu_callback_handler(void* context, const uint32_t index);
+void canutils_scene_manager_init(Application* app);
+void canutils_view_dispatcher_init(Application* app);
 
 #endif // __SCENE_H__

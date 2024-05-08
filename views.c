@@ -28,16 +28,16 @@
 #include <implementations.h>
 
 void (*const canutils_scene_on_enter_handlers[])(void*) = {
-  canutils_scene_on_enter_main_menu, // MainMenu
-  canutils_scene_on_enter_configuration, // Configuration
-  canutils_scene_on_enter_can_dump, // CanDump
-  canutils_scene_on_enter_can_player, // CanPlayer
-  canutils_scene_on_enter_can_send, // CanSend
-  canutils_scene_on_enter_can_gen, // CanGen
-  canutils_scene_on_enter_can_sequence, // CanSequence
-  canutils_scene_on_enter_can_sniffer, // CanSniffer
-  canutils_scene_on_enter_can_busload, // CanBusLoad
-  canutils_scene_on_enter_can_calcbittiming, // CanCalcBitTiming
-  canutils_scene_on_enter_can_fdtest, // CanFdTest
-  canutils_scene_on_enter_can_probe, // CanProbe
+    canutils_scene_on_enter_main_menu, // MainMenu
+    canutils_scene_on_enter_configuration, // Configuration
+    canutils_scene_on_enter_can_dump, // CanDump
+    canutils_scene_on_enter_can_player, // CanPlayer
+    canutils_scene_on_enter_can_send, // CanSend
+    canutils_scene_on_enter_can_gen, // CanGen
+    canutils_scene_on_enter_can_sequence, // CanSequence
+    canutils_scene_on_enter_can_sniffer, // CanSniffer
+    canutils_scene_on_enter_can_busload, // CanBusLoad
+    canutils_scene_on_enter_can_calcbittiming, // CanCalcBitTiming
+    canutils_scene_on_enter_can_fdtest, // CanFdTest
+    canutils_scene_on_enter_can_probe, // CanProbe
 };

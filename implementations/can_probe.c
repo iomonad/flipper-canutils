@@ -34,12 +34,11 @@
  *         \/           \/     \/
  */
 
-bool canutils_scene_on_event_can_probe(void *context,
-                                       SceneManagerEvent event) {
-  UNUSED(context);
-  UNUSED(event);
+bool canutils_scene_on_event_can_probe(void* context, SceneManagerEvent event) {
+    UNUSED(context);
+    UNUSED(event);
 
-  return false;
+    return false;
 }
 
 /**
@@ -52,10 +51,10 @@ bool canutils_scene_on_event_can_probe(void *context,
  *
  */
 
-void canutils_scene_on_exit_can_probe(void *context) {
-  Application *app = (Application*)context;
+void canutils_scene_on_exit_can_probe(void* context) {
+    Application* app = (Application*)context;
 
-  popup_reset(app->popup);
+    popup_reset(app->popup);
 }
 
 /**
@@ -67,12 +66,12 @@ void canutils_scene_on_exit_can_probe(void *context) {
  *                    \/
  */
 
-void canutils_scene_on_enter_can_probe(void *context) {
-  Application *app = (Application*)context;
-  furi_assert(app);
+void canutils_scene_on_enter_can_probe(void* context) {
+    Application* app = (Application*)context;
+    furi_assert(app);
 
-  popup_reset(app->popup);
-  popup_set_context(app->popup, app);
+    popup_reset(app->popup);
+    popup_set_context(app->popup, app);
 
-  view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
+    view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
 }
