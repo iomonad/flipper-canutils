@@ -22,4 +22,55 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
+#include <furi.h>
+#include <furi_hal_power.h>
+#include <furi_hal_usb.h>
+#include <furi_hal_spi.h>
+#include <furi_hal_spi_types.h>
+#include <furi_hal_spi_config.h>
+
 #include "mcp2518fd.h"
+
+#define TAG "mcp2518fd"
+
+mcp2518fd_device_t *mcp25158fd_register_driver(FuriHalSpiBusHandle *handle) {
+     mcp2518fd_device_t *device = NULL;
+
+     if ((device = (mcp2518fd_device_t*)malloc(sizeof(mcp2518fd_device_t))) == NULL) {
+	  FURI_LOG_I(TAG, "error allocating mcp2518fd_device_t device");
+
+	  return NULL;
+     }
+
+     device->initialized = false;
+
+     if (handle == NULL) {
+	  furi_hal_spi_bus_handle_init(&furi_hal_spi_bus_handle_external);
+	  furi_hal_spi_acquire(&furi_hal_spi_bus_handle_external);
+
+	  device->handle = furi_hal_spi_bus_handle_external;
+     } else {
+	  furi_hal_spi_bus_handle_init(handle);
+	  furi_hal_spi_acquire(handle);
+
+//	  device->handle = handle;
+     }
+
+     device->initialized = true;
+
+     return device;
+}
+
+bool mcp25158fd_release_driver(mcp2518fd_device_t *device) {
+     if (device == NULL) {
+	  return false;
+     }
+
+     /* if (device->handle) { */
+     /* 	  furi_hal_spi_release(&(device->handle)); */
+     /* 	  furi_hal_spi_bus_handle_deinit(&(device->handle)); */
+     /* } */
+
+     free(device);
+     return true;
+}

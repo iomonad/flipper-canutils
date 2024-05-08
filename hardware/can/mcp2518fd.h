@@ -25,4 +25,20 @@
 #ifndef __MCP2518FD_H__
 #define __MCP2518FD_H__
 
+#include <stdbool.h>
+
+#include <furi.h>
+#include <furi_hal_spi.h>
+#include <furi_hal_spi_types.h>
+#include <furi_hal_spi_config.h>
+
+typedef struct {
+     bool initialized;
+     FuriHalSpiBusHandle handle;
+} mcp2518fd_device_t;
+
+/* primitive */
+mcp2518fd_device_t *mcp25158fd_register_driver(FuriHalSpiBusHandle *handle);
+bool mcp25158fd_release_driver(mcp2518fd_device_t *device);
+
 #endif /* __MCP2518FD_H__ */

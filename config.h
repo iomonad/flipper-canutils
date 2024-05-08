@@ -25,7 +25,9 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-#include <can.h>
+#include <stdbool.h>
+
+#include <hardware/can/can.h>
 
 typedef struct {
     //mcp_can_speed_t speed;

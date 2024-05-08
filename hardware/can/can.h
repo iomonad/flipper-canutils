@@ -26,6 +26,8 @@
 #ifndef __CAN_H__
 #define __CAN_H__
 
+#include "mcp2518fd.h"
+
 typedef unsigned char __u8;
 typedef unsigned short __u16;
 typedef unsigned long __u32;
@@ -62,5 +64,16 @@ struct can_frame {
     __u8 can_dlc; /* frame payload length in byte (0 .. CAN_MAX_DLEN) */
     __u8 data[CAN_MAX_DLEN] __attribute__((aligned(8)));
 };
+
+/* device holder structure */
+typedef struct {
+     mcp2518fd_device_t *driver;
+} can_device_t;
+
+
+/* primitive */
+
+can_device_t *can_device_init();
+void         can_device_deinit(can_device_t *device);
 
 #endif // __CAN_H__
