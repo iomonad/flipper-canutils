@@ -37,7 +37,8 @@
 #include <gui/modules/text_input.h>
 #include <gui/modules/variable_item_list.h>
 
-#include <mcp2515.h>
+#include <furi_hal_spi_types.h>
+
 #include <canutils.h>
 
 typedef enum {

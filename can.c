@@ -23,4 +23,3 @@
  */
 
 #include <can.h>
-#include <mcp2515.h>

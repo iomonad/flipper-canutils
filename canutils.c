@@ -26,7 +26,6 @@
 
 #include <scene.h>
 #include <canutils.h>
-#include <mcp2515.h>
 
 /* Application context Steup */
 static Application *canutils_context_setup(void) {
@@ -45,8 +44,9 @@ static Application *canutils_context_setup(void) {
   view_allocate_model(app->conf_model, ViewModelTypeLockFree, sizeof(can_preferences_t));
 
   can_preferences_t *model = view_get_model(app->conf_model);
-  model->speed = 5;
-  model->clock = 0;
+  model->is_loopback = false;
+  /* model->speed = 5; */
+  /* model->clock = 0; */
 
   return app;
 }

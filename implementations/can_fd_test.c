@@ -24,7 +24,6 @@
 
 #include <scene.h>
 #include <canutils.h>
-#include <mcp2515.h>
 
 /**
  * ___________                    __
