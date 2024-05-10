@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
+ * Copyright (c) 2013 Seeed Technology Inc. Copyright (c) 2016 Dmitry
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
