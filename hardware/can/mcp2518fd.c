@@ -33,6 +33,45 @@
 
 #define TAG "mcp2518fd"
 
+
+/* static void MCPxx_write_trx() {} */
+/* static void MCPxx_write_reg() {} */
+/* static uint8_t MCPxx_read_reg(){}; */
+
+uint8_t mcp2518fd_initialize(mcp2518fd_device_t *device) {
+     (void)device;
+     return 0;
+}
+
+/* Lifecycle */
+
+bool mcp25158fd_release_driver(mcp2518fd_device_t *device) {
+     if (device == NULL) {
+	  return false;
+     }
+
+     if (device->initialized) {
+	  furi_hal_spi_release(&device->handle);
+	  furi_hal_spi_bus_handle_deinit(&device->handle);
+
+	  device->initialized = false;
+     }
+
+     free(device);
+     return true;
+}
+
+uint8_t mcp2518fd_reset(mcp2518fd_device_t *device) {
+     int8_t spiTransferError = 0;
+     int8_t spiTransmitBuffer[2];
+
+     spiTransmitBuffer[0] = (uint8_t)(cINSTRUCTION_RESET << 4);
+     spiTransmitBuffer[1] = 0;
+     (void)spiTransmitBuffer;
+     (void)device;
+     return spiTransferError;
+}
+
 mcp2518fd_device_t *mcp25158fd_register_driver(FuriHalSpiBusHandle *handle) {
      mcp2518fd_device_t *device = NULL;
 
@@ -53,24 +92,10 @@ mcp2518fd_device_t *mcp25158fd_register_driver(FuriHalSpiBusHandle *handle) {
 	  furi_hal_spi_bus_handle_init(handle);
 	  furi_hal_spi_acquire(handle);
 
-//	  device->handle = handle;
+	  device->handle = *handle;
      }
 
      device->initialized = true;
 
      return device;
-}
-
-bool mcp25158fd_release_driver(mcp2518fd_device_t *device) {
-     if (device == NULL) {
-	  return false;
-     }
-
-     /* if (device->handle) { */
-     /* 	  furi_hal_spi_release(&(device->handle)); */
-     /* 	  furi_hal_spi_bus_handle_deinit(&(device->handle)); */
-     /* } */
-
-     free(device);
-     return true;
 }
