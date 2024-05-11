@@ -33,8 +33,8 @@
 #define TAG "canutils"
 
 typedef enum {
-  False = 0x0,
-  True,
+    False = 0x0,
+    True,
 } bool_sel_t;
 
 #endif // __CANUTILS_H__

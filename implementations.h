@@ -25,62 +25,62 @@
 #include <canutils.h>
 
 /* MAIN MENU */
-bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event);
+bool canutils_scene_on_event_main_menu(void* context, SceneManagerEvent event);
 void canutils_scene_on_exit_main_menu(void* context);
 
-void canutils_scene_on_enter_main_menu(void *context);
+void canutils_scene_on_enter_main_menu(void* context);
 
 /* CONFIGURATION */
-bool canutils_scene_on_event_configuration(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_configuration(void *context);
-void canutils_scene_on_enter_configuration(void *context);
+bool canutils_scene_on_event_configuration(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_configuration(void* context);
+void canutils_scene_on_enter_configuration(void* context);
 
 /* can_dump */
-bool canutils_scene_on_event_can_dump(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_dump(void *context);
-void canutils_scene_on_enter_can_dump(void *context);
+bool canutils_scene_on_event_can_dump(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_dump(void* context);
+void canutils_scene_on_enter_can_dump(void* context);
 
 /* can_probe */
-bool canutils_scene_on_event_can_probe(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_probe(void *context);
-void canutils_scene_on_enter_can_probe(void *context);
+bool canutils_scene_on_event_can_probe(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_probe(void* context);
+void canutils_scene_on_enter_can_probe(void* context);
 
 /* can_player */
-bool canutils_scene_on_event_can_player(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_player(void *context);
-void canutils_scene_on_enter_can_player(void *context);
+bool canutils_scene_on_event_can_player(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_player(void* context);
+void canutils_scene_on_enter_can_player(void* context);
 
 /* can_send */
-bool canutils_scene_on_event_can_send(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_send(void *context);
-void canutils_scene_on_enter_can_send(void *context);
+bool canutils_scene_on_event_can_send(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_send(void* context);
+void canutils_scene_on_enter_can_send(void* context);
 
 /* can_gen */
-bool canutils_scene_on_event_can_gen(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_gen(void *context);
-void canutils_scene_on_enter_can_gen(void *context);
+bool canutils_scene_on_event_can_gen(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_gen(void* context);
+void canutils_scene_on_enter_can_gen(void* context);
 
 /* can_sequence */
-bool canutils_scene_on_event_can_sequence(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_sequence(void *context);
-void canutils_scene_on_enter_can_sequence(void *context);
+bool canutils_scene_on_event_can_sequence(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_sequence(void* context);
+void canutils_scene_on_enter_can_sequence(void* context);
 
 /* can_sniffer */
-bool canutils_scene_on_event_can_sniffer(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_sniffer(void *context);
-void canutils_scene_on_enter_can_sniffer(void *context);
+bool canutils_scene_on_event_can_sniffer(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_sniffer(void* context);
+void canutils_scene_on_enter_can_sniffer(void* context);
 
 /* can_busload */
-bool canutils_scene_on_event_can_busload(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_busload(void *context);
-void canutils_scene_on_enter_can_busload(void *context);
+bool canutils_scene_on_event_can_busload(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_busload(void* context);
+void canutils_scene_on_enter_can_busload(void* context);
 
 /* can_calcbittiming */
-bool canutils_scene_on_event_can_calcbittiming(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_calcbittiming(void *context);
-void canutils_scene_on_enter_can_calcbittiming(void *context);
+bool canutils_scene_on_event_can_calcbittiming(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_calcbittiming(void* context);
+void canutils_scene_on_enter_can_calcbittiming(void* context);
 
 /* can_fdtest */
-bool canutils_scene_on_event_can_fdtest(void *context, SceneManagerEvent event);
-void canutils_scene_on_exit_can_fdtest(void *context);
-void canutils_scene_on_enter_can_fdtest(void *context);
+bool canutils_scene_on_event_can_fdtest(void* context, SceneManagerEvent event);
+void canutils_scene_on_exit_can_fdtest(void* context);
+void canutils_scene_on_enter_can_fdtest(void* context);

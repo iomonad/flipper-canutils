@@ -22,5 +22,29 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#include <can.h>
-#include <mcp2515.h>
+#include <stdlib.h>
+
+#include "can.h"
+#include "mcp_can.h"
+#include "mcp2518fd.h"
+
+#define TAG __FILE__
+
+can_device_t *can_device_init() {
+     can_device_t *device = NULL;
+
+     if ((device = (can_device_t*)malloc(sizeof(can_device_t))) == NULL) {
+	  FURI_LOG_I(TAG, "error allocating can device");
+
+	  return NULL;
+     }
+
+     device->driver = mcp25158fd_register_driver(NULL);
+     return device;
+}
+
+void can_device_deinit(can_device_t *device) {
+     if (device == NULL) {
+	  return ;
+     }
+}

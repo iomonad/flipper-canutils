@@ -24,7 +24,6 @@
 
 #include <scene.h>
 #include <canutils.h>
-#include <mcp2515.h>
 
 /**
  * ___________                    __
@@ -35,12 +34,11 @@
  *         \/           \/     \/
  */
 
-bool canutils_scene_on_event_can_probe(void *context,
-                                       SceneManagerEvent event) {
-  UNUSED(context);
-  UNUSED(event);
+bool canutils_scene_on_event_can_probe(void* context, SceneManagerEvent event) {
+    UNUSED(context);
+    UNUSED(event);
 
-  return false;
+    return false;
 }
 
 /**
@@ -53,11 +51,10 @@ bool canutils_scene_on_event_can_probe(void *context,
  *
  */
 
-void canutils_scene_on_exit_can_probe(void *context) {
-  Application *app = (Application*)context;
+void canutils_scene_on_exit_can_probe(void* context) {
+    Application* app = (Application*)context;
 
-  mcp2515_release_driver(&app->mcp_handle);
-  popup_reset(app->popup);
+    popup_reset(app->popup);
 }
 
 /**
@@ -69,22 +66,16 @@ void canutils_scene_on_exit_can_probe(void *context) {
  *                    \/
  */
 
-void canutils_scene_on_enter_can_probe(void *context) {
-  Application *app = (Application*)context;
-  furi_assert(app);
+void canutils_scene_on_enter_can_probe(void* context) {
+    Application* app = (Application*)context;
+    furi_assert(app);
 
-  app->mcp_handle = mcp2515_register_driver(NULL);
+    mcp2518fd_device_t *x = mcp25158fd_register_driver(NULL);
 
-  popup_reset(app->popup);
-  popup_set_context(app->popup, app);
+    mcp2518fd_read_byte(x, 0xFFF, NULL);
 
+    popup_reset(app->popup);
+    popup_set_context(app->popup, app);
 
-  FURI_LOG_I(TAG, "mcp2515 - %d", mcp2515_read_status(&app->mcp_handle));
-  if (mcp2515_have_errors(&app->mcp_handle)) {
-    popup_set_header(app->popup, "MCP ERROR", 64, 10, AlignCenter, AlignTop);
-  } else {
-    popup_set_header(app->popup, "MCP CONNECTED", 64, 10, AlignCenter, AlignTop);
-  }
-
-  view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
+    view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
 }

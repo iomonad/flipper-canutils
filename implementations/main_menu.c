@@ -34,65 +34,65 @@
  *         \/           \/     \/
  */
 
-bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
-  Application *app = (Application*)context;
-  bool is_consumed = false;
+bool canutils_scene_on_event_main_menu(void* context, SceneManagerEvent event) {
+    Application* app = (Application*)context;
+    bool is_consumed = false;
 
-  switch (event.type) {
-  case SceneManagerEventTypeCustom: {
-    switch (event.event) {
-    case Event_Config:
-      scene_manager_next_scene(app->scene_manager, ViewScene_Configuration);
-      is_consumed = true;
-      break;
-    case Event_CanDump:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
-      is_consumed = true;
-      break;
-    case Event_CanPlayer:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanPlayer);
-      is_consumed = true;
-      break;
-    case Event_CanSend:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanSend);
-      is_consumed = true;
-      break;
-    case Event_CanGen:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanGen);
-      is_consumed = true;
-      break;
-    case Event_CanSequence:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanSequence);
-      is_consumed = true;
-      break;
-    case Event_CanSniffer:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanSniffer);
-      is_consumed = true;
-      break;
-    case Event_CanBusLoad:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanBusLoad);
-      is_consumed = true;
-      break;
-    case Event_CanCalcBitTiming:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanCalcBitTiming);
-      is_consumed = true;
-      break;
-    case Event_CanFdTest:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanFdTest);
-      is_consumed = true;
-      break;
-    case Event_CanProbe:
-      scene_manager_next_scene(app->scene_manager, ViewScene_CanProbe);
-      is_consumed = true;
-      break;
+    switch(event.type) {
+    case SceneManagerEventTypeCustom: {
+        switch(event.event) {
+        case Event_Config:
+            scene_manager_next_scene(app->scene_manager, ViewScene_Configuration);
+            is_consumed = true;
+            break;
+        case Event_CanDump:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanDump);
+            is_consumed = true;
+            break;
+        case Event_CanPlayer:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanPlayer);
+            is_consumed = true;
+            break;
+        case Event_CanSend:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanSend);
+            is_consumed = true;
+            break;
+        case Event_CanGen:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanGen);
+            is_consumed = true;
+            break;
+        case Event_CanSequence:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanSequence);
+            is_consumed = true;
+            break;
+        case Event_CanSniffer:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanSniffer);
+            is_consumed = true;
+            break;
+        case Event_CanBusLoad:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanBusLoad);
+            is_consumed = true;
+            break;
+        case Event_CanCalcBitTiming:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanCalcBitTiming);
+            is_consumed = true;
+            break;
+        case Event_CanFdTest:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanFdTest);
+            is_consumed = true;
+            break;
+        case Event_CanProbe:
+            scene_manager_next_scene(app->scene_manager, ViewScene_CanProbe);
+            is_consumed = true;
+            break;
+        }
+        break;
     }
-    break;
-  }
-  default:
-    is_consumed = false;
-    break;
-  }
-  return is_consumed;
+    default:
+        is_consumed = false;
+        break;
+    }
+    return is_consumed;
 }
 
 /**
@@ -106,10 +106,10 @@ bool canutils_scene_on_event_main_menu(void *context, SceneManagerEvent event) {
  */
 
 void canutils_scene_on_exit_main_menu(void* context) {
-  FURI_LOG_T(TAG, "canutils_scene_on_exit_main_menu");
+    FURI_LOG_T(TAG, "canutils_scene_on_exit_main_menu");
 
-  Application* app = (Application*)context;
-  menu_reset(app->menu);
+    Application* app = (Application*)context;
+    menu_reset(app->menu);
 }
 
 /**
@@ -121,22 +121,83 @@ void canutils_scene_on_exit_main_menu(void* context) {
  *                    \/
  */
 
-void canutils_scene_on_enter_main_menu(void *context) {
-  Application *app = (Application*)context;
+void canutils_scene_on_enter_main_menu(void* context) {
+    Application* app = (Application*)context;
 
-  menu_reset(app->menu);
+    menu_reset(app->menu);
 
-  menu_add_item(app->menu, "Configuration", NULL, Select_Config, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN Dump", NULL, Select_CanDump, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN Player", NULL, Select_CanPlayer, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN Send", NULL, Select_CanSend, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN Gen", NULL, Select_CanGen, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN Sequence", NULL, Select_CanSequence, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN Sniffer", NULL, Select_CanSniffer, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN BusLoad", NULL, Select_CanBusLoad, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN CalcBitTiming", NULL, Select_CanCalcBitTiming, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN FdTest", NULL, Select_CanFdTest, canutils_scene_main_menu_callback_handler, app);
-  menu_add_item(app->menu, "CAN Probe", NULL, Select_CanProbe, canutils_scene_main_menu_callback_handler, app);
+    menu_add_item(
+        app->menu,
+        "Configuration",
+        NULL,
+        Select_Config,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN Dump",
+        NULL,
+        Select_CanDump,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN Player",
+        NULL,
+        Select_CanPlayer,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN Send",
+        NULL,
+        Select_CanSend,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu, "CAN Gen", NULL, Select_CanGen, canutils_scene_main_menu_callback_handler, app);
+    menu_add_item(
+        app->menu,
+        "CAN Sequence",
+        NULL,
+        Select_CanSequence,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN Sniffer",
+        NULL,
+        Select_CanSniffer,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN BusLoad",
+        NULL,
+        Select_CanBusLoad,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN CalcBitTiming",
+        NULL,
+        Select_CanCalcBitTiming,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN FdTest",
+        NULL,
+        Select_CanFdTest,
+        canutils_scene_main_menu_callback_handler,
+        app);
+    menu_add_item(
+        app->menu,
+        "CAN Probe",
+        NULL,
+        Select_CanProbe,
+        canutils_scene_main_menu_callback_handler,
+        app);
 
-  view_dispatcher_switch_to_view(app->view_dispatcher, ViewScene_Menu);
+    view_dispatcher_switch_to_view(app->view_dispatcher, ViewScene_Menu);
 }
