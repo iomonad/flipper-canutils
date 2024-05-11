@@ -70,6 +70,10 @@ void canutils_scene_on_enter_can_probe(void* context) {
     Application* app = (Application*)context;
     furi_assert(app);
 
+    mcp2518fd_device_t *x = mcp25158fd_register_driver(NULL);
+
+    mcp2518fd_read_byte(x, 0xFFF, NULL);
+
     popup_reset(app->popup);
     popup_set_context(app->popup, app);
 

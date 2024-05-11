@@ -1370,6 +1370,16 @@ typedef struct {
      uint8_t txd[MCP2518FD_MAX_DATA_BYTES];
 } mcp2518fd_device_t;
 
+/* api */
+int8_t mcp2518fd_read_byte(mcp2518fd_device_t *device, uint16_t address, uint8_t *rxd);
+int8_t mcp2518fd_write_byte(mcp2518fd_device_t *device, uint16_t address, uint8_t txd);
+int8_t mcp2518fd_read_word(mcp2518fd_device_t *device, uint16_t address, uint32_t *rxd);
+int8_t mcp2518fd_write_word(mcp2518fd_device_t *device, uint16_t address, uint32_t txd);
+int8_t mcp2518fd_read_halfword(mcp2518fd_device_t *device, uint16_t address, uint16_t *rxd);
+int8_t mcp2518fd_write_halfword(mcp2518fd_device_t *device, uint16_t address, uint16_t txd);
+int8_t mcp2518fd_read_bytearray(mcp2518fd_device_t *device, uint16_t address, uint8_t *rxd, uint16_t count);
+int8_t mcp2518fd_write_bytearray(mcp2518fd_device_t *device, uint16_t address, uint8_t *txd, uint16_t count);
+
 /* primitive */
 mcp2518fd_device_t *mcp25158fd_register_driver(FuriHalSpiBusHandle *handle);
 bool mcp25158fd_release_driver(mcp2518fd_device_t *device);

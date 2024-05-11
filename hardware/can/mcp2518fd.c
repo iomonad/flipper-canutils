@@ -34,10 +34,84 @@
 
 #define TAG "mcp2518fd"
 
+int8_t mcp2518fd_read_byte(mcp2518fd_device_t *device,
+			   uint16_t address, uint8_t *rxd) {
+     furi_hal_spi_acquire(&device->handle);
 
-/* static void MCPxx_write_trx() {} */
-/* static void MCPxx_write_reg() {} */
-/* static uint8_t MCPxx_read_reg(){}; */
+     uint8_t txbuff[64];
+     txbuff[0] =
+	  (uint8_t)((cINSTRUCTION_READ << 4) + ((address >> 8) & 0xF));
+     txbuff[1] = (uint8_t)(address & 0xFF);
+     txbuff[2] = 0;
+
+     if (furi_hal_spi_bus_trx(&device->handle, txbuff, rxd, 1, 10000)) {
+	  return 0;
+     } else {
+	  return 1;
+     }
+
+     furi_hal_spi_release(&device->handle);
+
+     return 0;
+}
+
+/* int8_t mcp2518fd_write_byte(mcp2518fd_device_t *device, */
+/* 			    uint16_t address, uint8_t txd) { */
+/*      return ; */
+/* } */
+
+/* uint8_t mcp2518fd_read_word(mcp2518fd_device_t *device, */
+/* 			    uint16_t address, uint32_t *rxd) { */
+/*      return ; */
+/* } */
+
+/* uint8_t mcp2518fd_write_word(mcp2518fd_device_t *device, */
+/* 			     uint16_t address, uint32_t txd) { */
+/*      return ; */
+/* } */
+
+/* uint8_t mcp2518fd_read_halfword(mcp2518fd_device_t *device, */
+/* 				uint16_t address, uint16_t *rxd) { */
+/*      return ; */
+/* } */
+
+/* uint8_t mcp2518fd_write_halfword(mcp2518fd_device_t *device, */
+/* 				 uint16_t address, uint16_t txd) { */
+/*      return ; */
+/* } */
+
+/* uint8_t mcp2518fd_read_bytearray(mcp2518fd_device_t *device, */
+/* 				 uint16_t address, uint8_t *rxd, uint16_t count) { */
+/*      return ; */
+/* } */
+
+/* uint8_t mcp2518fd_write_bytearray(mcp2518fd_device_t *device, */
+/* 				  uint16_t address, uint8_t *txd, uint16_t count) { */
+/*      return ; */
+/* } */
+
+
+
+/* uint8_t mcp2518fd_enable_ecc(mcp2518fd_device_t *device) { */
+/*      int8_t spi_status = 0; */
+/*      uint8_t d = 0; */
+
+/*      if ((spi_status = mcp2518fd_read_byte(device, cREGADDR_ECCCON, &d))) { */
+/* 	       return -1; */
+/*      } */
+
+/*      FURI_LOG_I(TAG, "ECC acquired"); */
+/*      d |= 0x01; */
+
+/*      if ((spi_status = mcp2518fd_write_byte(device, cREGADDR_ECCCON, d))) { */
+/* 	  return -2; */
+/*      } */
+
+/*      FURI_LOG_I(TAG, "ECC updated"); */
+/*      return 0; */
+/* } */
+
+
 
 uint8_t mcp2518fd_initialize(mcp2518fd_device_t *device) {
      (void)device;
@@ -52,9 +126,7 @@ bool mcp25158fd_release_driver(mcp2518fd_device_t *device) {
      }
 
      if (device->initialized) {
-	  furi_hal_spi_release(&device->handle);
 	  furi_hal_spi_bus_handle_deinit(&device->handle);
-
 	  device->initialized = false;
      }
 
@@ -63,14 +135,9 @@ bool mcp25158fd_release_driver(mcp2518fd_device_t *device) {
 }
 
 uint8_t mcp2518fd_reset(mcp2518fd_device_t *device) {
-     int8_t spiTransferError = 0;
-     int8_t spiTransmitBuffer[2];
+     (void) device;
 
-     spiTransmitBuffer[0] = (uint8_t)(cINSTRUCTION_RESET << 4);
-     spiTransmitBuffer[1] = 0;
-     (void)spiTransmitBuffer;
-     (void)device;
-     return spiTransferError;
+     return 0;
 }
 
 mcp2518fd_device_t *mcp25158fd_register_driver(FuriHalSpiBusHandle *handle) {
@@ -86,13 +153,9 @@ mcp2518fd_device_t *mcp25158fd_register_driver(FuriHalSpiBusHandle *handle) {
 
      if (handle == NULL) {
 	  furi_hal_spi_bus_handle_init(&furi_hal_spi_bus_handle_external);
-	  furi_hal_spi_acquire(&furi_hal_spi_bus_handle_external);
-
 	  device->handle = furi_hal_spi_bus_handle_external;
      } else {
 	  furi_hal_spi_bus_handle_init(handle);
-	  furi_hal_spi_acquire(handle);
-
 	  device->handle = *handle;
      }
 
