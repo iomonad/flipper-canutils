@@ -24,7 +24,6 @@
 
 #include <scene.h>
 #include <canutils.h>
-#include <mcp2515.h>
 
 /**
  * ___________                    __
@@ -35,12 +34,11 @@
  *         \/           \/     \/
  */
 
-bool canutils_scene_on_event_can_gen(void *context,
-                                       SceneManagerEvent event) {
-  UNUSED(context);
-  UNUSED(event);
+bool canutils_scene_on_event_can_gen(void* context, SceneManagerEvent event) {
+    UNUSED(context);
+    UNUSED(event);
 
-  return false;
+    return false;
 }
 
 /**
@@ -53,10 +51,10 @@ bool canutils_scene_on_event_can_gen(void *context,
  *
  */
 
-void canutils_scene_on_exit_can_gen(void *context) {
-  Application *app = (Application*)context;
+void canutils_scene_on_exit_can_gen(void* context) {
+    Application* app = (Application*)context;
 
-  popup_reset(app->popup);
+    popup_reset(app->popup);
 }
 
 /**
@@ -68,13 +66,13 @@ void canutils_scene_on_exit_can_gen(void *context) {
  *                    \/
  */
 
-void canutils_scene_on_enter_can_gen(void *context) {
-  Application *app = (Application*)context;
+void canutils_scene_on_enter_can_gen(void* context) {
+    Application* app = (Application*)context;
 
-  popup_reset(app->popup);
-  popup_set_context(app->popup, app);
+    popup_reset(app->popup);
+    popup_set_context(app->popup, app);
 
-  popup_set_header(app->popup, "can_gen", 64, 10, AlignCenter, AlignTop);
+    popup_set_header(app->popup, "can_gen", 64, 10, AlignCenter, AlignTop);
 
-  view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
+    view_dispatcher_switch_to_view(app->view_dispatcher, View_Popup);
 }

@@ -7,7 +7,7 @@ App(
     entry_point="canutils_app",
     stack_size=3 * 1024,
     fap_category="CAN",
-    fap_version="0.1",
+    fap_version="0.1.0",
     fap_icon="canutils.png",  # 10x10 1-bit PNG
     fap_description="CanBUS utilities",
     fap_author="iomonad",

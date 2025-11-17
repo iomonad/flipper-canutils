@@ -22,6 +22,6 @@
  * (C) Author: iomonad <iomonad@riseup.net>
  */
 
-#include <canopen.h>
+#include "canopen.h"
 
 /* TODO: CANOPEN STD implementation */
